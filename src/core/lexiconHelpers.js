@@ -41,7 +41,12 @@ export async function senses({strong}) {
     path = `content/${strong}/01.md`;
   }
   if (repository && path) {
-    const lexiconMarkdown = await getFile({username: 'unfoldingword', repository, path});
+    const lexiconMarkdown = await getFile({username: 'unfoldingword', repository, path, config: {
+      server: "https://git.door43.org",
+      cache: {
+        maxAge: 365 * 24 * 60 * 60 * 1000, // override cache to 1 year
+      },
+    }});
     senses = parseSenses({lexiconMarkdown});
   }
   if (!senses) throw(Error(`Could not find sense info for: ${strong}`));
