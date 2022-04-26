@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   Typography,
 } from '@material-ui/core';
-import { senses } from '../../core/lexiconHelpers';
+import { senses as getSenses } from '../../core/lexiconHelpers';
 
 function OriginalWordObject ({
   verseObject,
@@ -23,7 +23,7 @@ function OriginalWordObject ({
   const [ senses, setSenses ] = useState([]);
   useEffect(() => {
     if (strong) {
-      senses({strong}).then((_senses) => {
+      getSenses({strong}).then((_senses) => {
         setSenses(_senses);
       });
     }
