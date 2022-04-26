@@ -1,11 +1,11 @@
 {
-  "name": "scripture-resources-rcl",
+  "name": "@texttree/scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.2.0",
-  "homepage": "https://scripture-resources-rcl.netlify.com/",
+  "version": "5.3.0",
+  "homepage": "https://tt-scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/unfoldingWord/scripture-resources-rcl"
+    "url": "https://github.com/texttree/scripture-resources-rcl"
   },
   "private": false,
   "license": "MIT",
