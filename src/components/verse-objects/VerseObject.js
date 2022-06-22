@@ -20,7 +20,7 @@ function VerseObject({
   getLexiconData,
   translate,
 }) {
-  const { type } = verseObject;
+  const { type, tag } = verseObject;
   let component;
 
   switch (type) {
@@ -73,8 +73,12 @@ function VerseObject({
       component = <FootnoteObject verseObject={verseObject} />;
       break;
     default:
-      if (showUnsupported) {
-        component = <UnsupportedObject verseObject={verseObject} />;
+      if (tag === 'it') {
+        component = <i>{verseObject.text}</i>;
+      } else {
+        if (showUnsupported) {
+          component = <UnsupportedObject verseObject={verseObject} />;
+        }
       }
       break;
   }
