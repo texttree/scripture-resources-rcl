@@ -75,6 +75,8 @@ function VerseObject({
     default:
       if (tag === 'it') {
         component = <i>{verseObject.text}</i>;
+      } else if (tag === 'add') {
+        component = <span style={{ color: 'DimGray' }}>{verseObject.text}</span>;
       } else {
         if (showUnsupported) {
           component = <UnsupportedObject verseObject={verseObject} />;
