@@ -21,7 +21,7 @@ function VerseObject({
   translate,
   reference,
 }) {
-  const { type } = verseObject;
+  const { type, tag } = verseObject;
   let component;
 
   switch (type) {
@@ -90,8 +90,14 @@ function VerseObject({
       component = <FootnoteObject verseObject={verseObject} />;
       break;
     default:
-      if (showUnsupported) {
-        component = <UnsupportedObject verseObject={verseObject} />;
+      if (tag === 'it') {
+        component = <i>{verseObject.text}</i>;
+      } else if (tag === 'add') {
+        component = <span style={{ color: 'DimGray' }}>{verseObject.text}</span>;
+      } else {
+        if (showUnsupported) {
+          component = <UnsupportedObject verseObject={verseObject} />;
+        }
       }
       break;
   }

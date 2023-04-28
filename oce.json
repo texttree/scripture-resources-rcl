@@ -1,0 +1,10 @@
+{
+  "name": "npm/@texttree/scripture-resources-rcl",
+  "version": "5.3.2",
+  "date": "2022-06-24",
+  "dependencies": ["npm/deep-freeze", "npm/gitea-react-toolkit",
+    "npm/js-yaml-parser", "npm/lodash",
+    "npm/markdown-translatable", "npm/nyc",
+    "npm/react-waypoint", "npm/string-punctuation-tokenizer",
+    "npm/use-deep-compare-effect", "npm/usfm-js"]
+}
