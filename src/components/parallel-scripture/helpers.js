@@ -5,8 +5,16 @@ export const referenceIdsFromBooks = ({ books }) => {
 
   books.forEach((book) => {
     if (book) {
-      Object.keys(book.chapters).forEach((chapterKey) => {
-        const chapter = book.chapters[chapterKey];
+      let _chapters;
+      if ( book.chapters ) {
+        _chapters = book.chapters;
+      } else if ( book.json.chapters ) {
+        _chapters = book.json.chapters;
+      } else {
+        return;
+      }
+      Object.keys(_chapters).forEach((chapterKey) => {
+        const chapter = _chapters[chapterKey];
 
         Object.keys(chapter).forEach((verseKey) => {
           const referenceId = chapterKey + ':' + verseKey;
@@ -38,12 +46,40 @@ export const rangeFromVerseAndVerseKeys = (({ verseKeys, verseKey }) => {
 });
 
 export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
+  // console.log("versesFromReferenceIdAndBooks() referenceId,books=", referenceId,books)
   const versesData = books.map((book, index) => {
     const reference = referenceFromReferenceId(referenceId);
     //if (book && book.chapters && book.chapters.length > reference.chapter) {
     if (book) {
-
-      const chapterData = book.chapters[reference.chapter];
+      // this is odd... book is coming in with two different formats.
+      // One kind looks like this:
+      // {headers: Array(2), chapters: {…}}
+      // chapters: {1: {…}, 2: {…}, 3: {…}}
+      // headers: (2) [{…}, {…}]
+      //
+      // the other, which does not match the expected shape:
+      // {json: {…}, response: {…}}
+      // json:
+      // chapters:
+      // 1: {1: {…}, 2: {…}, 3: {…}, 4: {…}, 5: {…}, 6: {…}, 7: {…}, 8: {…}, 9: {…}, 10: {…}, 11: {…}, 12: {…}, 13: {…}, 14: {…}, 15: {…}, front: {…}}
+      // [[Prototype]]: Object
+      // headers: []
+      // [[Prototype]]: Object
+      // response: {data: {…},
+      //
+      // So doing a bit of manipulation to provide the expected shape
+      // that does not have the "json" and "response" intermediate attributes
+      let _chapters;
+      if ( book.chapters ) {
+        _chapters = book.chapters;
+      } else if ( book.json.chapters ) {
+        _chapters = book.json.chapters;
+      } else {
+        return;
+      }
+      // console.log("index, book, and reference=", index, book, reference);
+      // console.log("chapterData=", _chapters[reference.chapter]);
+      const chapterData = _chapters[reference.chapter];
       let verseData = chapterData && chapterData[reference.verse];
       let range;
 
@@ -95,33 +131,23 @@ export const dataFromBooks = ({ books }) => {
   return data;
 };
 
-export const dataFromReference = ({ books, reference }) => {
-  const referenceId = referenceIdFromReference(reference);
-  let row = { referenceId };
-
-  books.forEach((_, index) => {
-    const chapterData = books[index].chapters[reference.chapter];
-    const verseData = chapterData[reference.verse];
-
-    if (!verseData) {
-      const verseKeys = Object.keys(chapterData);
-      const range = rangeFromVerseAndVerseKeys({ verseKeys, verseKey: reference.verse });
-      verse = chapterData[range];
-    }
-
-    if (verse) {
-      row[index] = JSON.stringify({ referenceId, ...verse });
-    }
-  });
-
-  const data = [row];
-  return data;
-};
-
 export const referenceIdFromReference = (reference) => reference.chapter + ':' + reference.verse;
+
+export const referenceIdsFromBcvQuery = (bcvQuery) => {
+  const resArray = []
+  if (bcvQuery?.book) {
+    Object.entries(bcvQuery?.book).forEach(([bookKey, { ch }]) => {
+      Object.entries(ch).forEach(([chNum, { v }]) => {
+        Object.entries(v).forEach(([vNum]) => {
+          resArray.push(`${chNum}:${vNum}`);
+        })
+      })
+    })
+  }
+  return resArray
+}
 
 export const referenceFromReferenceId = (referenceId) => {
   const [chapter, verse] = referenceId.split(':');
   return { chapter, verse };
 };
-

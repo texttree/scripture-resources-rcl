@@ -16,6 +16,7 @@ function AlignedWordsObject({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -33,10 +34,9 @@ function AlignedWordsObject({
 
   if (_selectionsContext) {
     const {
-      state: selections,
-      actions: { areSelected, addSelections, removeSelections },
+      actions: { areSelected },
     } = _selectionsContext;
-    selected = areSelected(originalWords);
+    selected = areSelected(originalWords, reference);
   }
 
   const words = children.map((verseObject, index) => (
@@ -68,6 +68,7 @@ function AlignedWordsObject({
           const isHebrew = lexiconData['uhl'];
           return (
             <WordLexiconDetails
+              key={index}
               lexiconData={lexiconData}
               wordObject={wordObject}
               translate={translate || translate_}
@@ -134,6 +135,8 @@ AlignedWordsObject.propTypes = {
   getLexiconData: PropTypes.func,
   /** optional function for localization */
   translate: PropTypes.func,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
 };
 
 const useStyles = makeStyles((theme) => ({

@@ -20,7 +20,7 @@ function ColumnsMenu({
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
   const { resources } = state || {};
-  
+
 const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   const onResourceAddClick = async () => {
@@ -59,7 +59,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   const menuItems = columns.map((col, index) => (
     <MenuItem key={col.id}>
-      <Grid container justify='space-between'>
+      <Grid container justifyContent="space-between">
         <Grid item>
           <div>
             <FormControlLabel
@@ -77,7 +77,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
                   aria-label={localString('Remove')}
                   onClick={() => removeResourceLink(index)}
                   className={classes.action}
-                  size='small'
+                  size="small"
                 >
                   <HighlightOff />
                 </IconButton>
@@ -97,13 +97,13 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
   return (
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={onCloseMenu}>
       <MenuItem style={{justifyContent: "flex-end"}}>
-        <IconButton 
-          aria-label='Close' 
-          onClick={onCloseMenu} 
+        <IconButton
+          aria-label='Close'
+          onClick={onCloseMenu}
           className={classes.close}
           disabled={false}
         >
-          <CloseIcon fontSize='small' /> 
+          <CloseIcon fontSize='small' />
         </IconButton>
       </MenuItem>
 
@@ -119,7 +119,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
       {menuItems}
 
-      {actions && actions.addResourceLink && 
+      {actions && actions.addResourceLink &&
         <MenuItem>
           <TextField
             id='resourceUrl'
@@ -141,7 +141,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
         </MenuItem>
       }
 
-      {isResourceAddError && 
+      {isResourceAddError &&
         <MenuItem
           key={'text'}
           disabled

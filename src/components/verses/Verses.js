@@ -20,14 +20,17 @@ export const Verses = ({
   let [_verses, setVerses] = useState();
   let [_front, setFront] = useState();
   let [_back, setBack] = useState();
-  let [dir, setDir] = useState(direction);
+  // let [dir, setDir] = useState(direction);
 
   useEffect(() => {
     if (!direction) {
-      const verseText = verses['1'].verseObjects.map(verseObject => verseObject.text).join('');
-      const hebrew = isHebrew(verseText);
-      if (hebrew) setDir('rtl');
-      else setDir('auto');
+      const verseKeys = Object.keys(verses);
+
+      if (verseKeys.length>0) {
+        const verseText = verses[verseKeys[0]].verseObjects.map(verseObject => verseObject.text).join('');
+        const hebrew = isHebrew(verseText);
+        // setDir((hebrew) ? 'rtl' : 'auto');
+      }
     }
   }, [verses, direction]);
 
@@ -35,6 +38,13 @@ export const Verses = ({
     let __verses = [];
     Object.keys(verses).forEach((verseKey, index) => {
       const {verseObjects} = verses[verseKey];
+      const verseText = verseObjects.map(verseObject => verseObject.text).join('');
+      // console.log("verseText", verseText);
+      const hebrew = isHebrew(verseText);
+      let _dir = direction || 'auto';
+      if (hebrew) {
+        _dir = 'rtl';
+      }
       const verse = (
         <Verse
           key={index}
@@ -47,6 +57,7 @@ export const Verses = ({
           renderOffscreen={renderOffscreen}
           getLexiconData={getLexiconData}
           translate={translate}
+          direction={_dir}
         />
       );
       if (verseKey === 'front') setFront(verse);
@@ -58,7 +69,7 @@ export const Verses = ({
   }, [verses, paragraphs, showUnsupported, disableWordPopover]);
 
   return (
-    <div className={classes.verses} dir={dir}>
+    <div className={classes.verses} >
       {_front}
       {_verses}
       {_back}

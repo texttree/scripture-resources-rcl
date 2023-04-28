@@ -33,19 +33,19 @@ function ParallelTitles ({
     <Grid
       container
       direction="row"
-      justify="flex-end"
+      justifyContent="flex-end"
       alignItems="center"
       className={classes.root}
     >
       {_actions}
       {buttons}
     </Grid>
-  )
+  );
 };
 
 ParallelTitles.propTypes = {
   actions: PropTypes.arrayOf(
-    PropTypes.shape({  
+    PropTypes.shape({
       icon: PropTypes.element.isRequired,
       tooltip: PropTypes.string.isRequired,
       onClick: PropTypes.func,

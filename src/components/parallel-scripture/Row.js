@@ -54,15 +54,21 @@ function Row({
         return (
           <TableCell key={column.id} className={classes.cell} dir='auto'>
             {verse ? (<Verse
-              verseObjects={verseObjects}
-              verseKey={verseTitle}
-              direction='auto'
-              renderOffscreen
-              disableWordPopover
-              getLexiconData={getLexiconData}
-              translate={translate}
-            />) : <span>&nbsp;</span>
-            }
+                verseObjects={verseObjects}
+                verseKey={verseTitle}
+                direction='auto'
+                renderOffscreen
+                disableWordPopover
+                getLexiconData={getLexiconData}
+                translate={translate}
+                reference={{
+                  chapter: referenceId.split(':')[0],
+                  verse: referenceId.split(':')[1],
+                }}
+              />
+            ) : (
+              <span>&nbsp;</span>
+            )}
           </TableCell>
         );
       });

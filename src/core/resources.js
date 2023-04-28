@@ -244,8 +244,8 @@ export const extendProject = ({
       const start = performance.now();
       let results;
 
-      if (reference && reference.chapter) {
-        results = await parseChapter({ project: _project, reference });
+      if (reference && (reference.chapter || reference.bcvQuery)) {
+        results = await parseChapters({ project: _project, reference });
       } else {
         results = await parseBook({ project: _project });
       }
@@ -291,29 +291,42 @@ export const parseBook = async ({ project }) => {
   return { json, response };
 };
 
-export const parseChapter = async ({ project, reference }) => {
+export const chapterListFromBcvQuery = (bcvQuery) => {
+  const resArray = []
+  if (bcvQuery?.book) {
+    Object.entries(bcvQuery?.book).forEach(([bookKey, { ch }]) => {
+      Object.entries(ch).forEach(([chNum, { v }]) => {
+        resArray.push(chNum);
+      })
+    })
+  }
+  return resArray
+}
+
+export const parseChapters = async ({ project, reference }) => {
   const response = await project.file();
   const usfm = getResponseData(response);
 
   if (usfm) {
-    const thisChapter = parseInt(reference.chapter);
-    const nextChapter = thisChapter + 1;
-    const regexpString =
-      '(\\\\c\\s*' +
-      thisChapter +
-      '\\s*(.*?\n?)*?)(?:(\\\\c\\s*' +
-      nextChapter +
-      '|$))';
-    const regexp = new RegExp(regexpString, '');
-    const matches = usfm.match(regexp);
+    let chapterText = '';
+    const chList = reference?.bcvQuery ? chapterListFromBcvQuery(reference?.bcvQuery) : [reference?.chapter]
 
-    let chapter = '';
+    chList?.forEach(ch => {
+      const nextChapter = ch + 1;
+      const regexpString =
+        '(\\\\c\\s*' +
+        ch +
+        '\\s*(.*?\n?)*?)(?:(\\\\c\\s*' +
+        nextChapter +
+        '|$))';
+      const regexp = new RegExp(regexpString, '');
+      const matches = usfm.match(regexp);
+      if (matches) {
+        chapterText += matches[1];
+      }
+    })
 
-    if (matches) {
-      chapter = matches[1];
-    }
-
-    const json = usfmJS.toJSON(chapter);
+    const json = usfmJS.toJSON(chapterText);
     return { json, response };
   }
 };

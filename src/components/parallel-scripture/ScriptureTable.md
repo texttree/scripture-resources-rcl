@@ -1,9 +1,8 @@
 ### Using a Context
 
 ```js
-import {ScriptureTable, 
+import {ScriptureTable,
   ResourcesContext, ResourcesContextProvider,
-  SelectionsContext, SelectionsContextProvider,
 } from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
@@ -12,12 +11,12 @@ import usfmJS from 'usfm-js';
 function Component ({reference}) {
 
   const resourcesContext = React.useContext(ResourcesContext);
-  const resources = resourcesContext.state;
+  const resources = resourcesContext.state.resources;
 
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
-  const [quote, setQuote] = React.useState('Θεὸς…λόγος');
+  const [quote, setQuote] = React.useState('Θεὸς & λόγος');
   const [occurrence, setOccurrence] = React.useState(1);
 
   useEffect(() => {
@@ -33,12 +32,8 @@ function Component ({reference}) {
         return _title;
       });
       setTitles(_titles);
-      const promises = resources.map((resource, index) => resource.project.file() );
-      Promise.all(promises).then(files => {
-        const start = performance.now();
-        const _books = files.map(file => usfmJS.toJSON(file));
-        const end = performance.now();
-        console.log(`USFM parsing books took: ${(end - start).toFixed(3)}ms`);
+      const promises = resources.map((resource, index) => resource.project.parseUsfm() );
+      Promise.all(promises).then(_books => {
         setBooks(_books);
       });
     }
@@ -66,7 +61,7 @@ function Component ({reference}) {
 
 const resourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/v0.8',
-  'unfoldingWord/en/ult/v5',
+    'unfoldingWord/en/ult/v5',
   'unfoldingWord/en/ust/v5',
 ];
 
@@ -76,13 +71,13 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 
 //<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
 const [ resources, setResources ] = React.useState( [] );
-const quote='Θεὸς…λόγος';
+const quote='Θεὸς & λόγος';
 const occurrence=1;
 <>
   <ResourcesContextProvider
     reference={reference}
     resources={resources}
-    resourceLinks={resourceLinks} 
+    resourceLinks={resourceLinks}
     onResources={setResources}
     config={config}
   >
@@ -108,27 +103,45 @@ import bhd_tit from '../mocks/bhd_tit.usfm.js';
 const titles = [
   'UGNT - Greek',
   'English - ULT (aligned)',
-  'Hindi - IRV (aligned)',
-  'Hindi - ULB',
-  'Bhadrawahi - ULB',
+ 'Hindi - IRV (aligned)',
+ 'Hindi - ULB',
+ 'Bhadrawahi - ULB',
 ];
 
 const books = [
   usfmJS.toJSON(ugnt_tit),
   usfmJS.toJSON(en_aligned_tit),
-  usfmJS.toJSON(hi_aligned_tit),
-  usfmJS.toJSON(hi_tit),
-  usfmJS.toJSON(bhd_tit),
+ usfmJS.toJSON(hi_aligned_tit),
+ usfmJS.toJSON(hi_tit),
+ usfmJS.toJSON(bhd_tit),
 ];
+
+const bcvQuery = {
+  book: {
+    "tit": {
+      ch: {
+        1: {
+          v: {
+            1: { },
+            2: { },
+            3: { },
+          }
+        },
+      },
+    },
+  },
+}
+
 
 const reference = {
   bookId: 'tit',
   chapter: 1,
-  verse: 3,
+  verse: '1-3',
+  bcvQuery
 };
 
 const [component, setComponent] = React.useState(<></>)
-const [quote, setQuote] = React.useState("τοῦ σωτῆρος ἡμῶν θεοῦ");
+const [quote, setQuote] = React.useState("χρόνων αἰωνίων & καιροῖς ἰδίοις");
 const [occurrence, setOccurrence] = React.useState(1);
 
 React.useEffect(() => {

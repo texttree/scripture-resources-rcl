@@ -18,7 +18,9 @@ import { SelectionsContextProvider } from '../selections/Selections.context';
 import {
   referenceIdsFromBooks,
   referenceIdFromReference,
+  referenceIdsFromBcvQuery,
   versesFromReferenceIdAndBooks,
+  referenceFromReferenceId,
 } from './helpers';
 
 function ScriptureTable({
@@ -47,13 +49,28 @@ function ScriptureTable({
   if (
     reference &&
     reference.verse &&
+    books &&
     books[0] &&
-    books[0].chapters &&
-    books[0].chapters[reference.chapter]
+  ((books[0].chapters &&
+		books[0].chapters[reference.chapter]) ||
+  ((books[0].json.chapters &&
+	    books[0].json.chapters[reference.chapter]) ))
   ) {
-    const chapter = books[0].chapters[reference.chapter];
-    const verse = chapter[reference.verse];
-    verseObjects = verse ? verse.verseObjects : [];
+    const chapter = books[0].json ? books[0].json.chapters[reference.chapter] : books[0].chapters[reference.chapter];
+    if (!reference?.bcvQuery) {
+      const verse = chapter[reference.verse];
+      verseObjects = verse ? verse.verseObjects : [];
+    } else {
+      const referenceIds = referenceIdsFromBcvQuery(reference?.bcvQuery);
+      for (const referenceId of referenceIds) {
+        const reference = referenceFromReferenceId(referenceId);
+        const chapter = books[0].json
+          ? books[0].json.chapters[reference.chapter]
+          : books[0].chapters[reference.chapter];
+        const verse = chapter[reference.verse];
+        verseObjects.push(verse ? verse.verseObjects : []);
+      }
+    }
   }
 
   useEffect(() => {
@@ -65,6 +82,7 @@ function ScriptureTable({
   }, [titles]);
 
   useEffect(() => {
+    if ( !books ) return;
     const _referenceIds = referenceIdsFromBooks({ books });
     setReferenceIds(_referenceIds);
   }, [books]);
@@ -109,8 +127,12 @@ function ScriptureTable({
 
   let _referenceIds = referenceIds;
 
-  if (filter && reference.chapter && reference.verse) {
-    _referenceIds = [referenceIdFromReference(reference)];
+  if (filter) {
+    if (reference?.bcvQuery) {
+      _referenceIds = referenceIdsFromBcvQuery(reference?.bcvQuery);
+    } else if (reference.chapter && reference.verse) {
+      _referenceIds = [referenceIdFromReference(reference)];
+    }
   }
 
   const rows = useMemo(
@@ -131,7 +153,7 @@ function ScriptureTable({
         );
         return row;
       }),
-    [_referenceIds, books, open, renderOffscreen, reference, filter, columns]
+    [_referenceIds, books, open, renderOffscreen, reference, filter, columns],
   );
 
   useEffect(() => {
@@ -155,6 +177,7 @@ function ScriptureTable({
       verseObjects={verseObjects}
       selections={selections}
       onSelections={setSelections}
+      reference={reference}
     >
       <Toolbar title={title} actions={actions} buttons={buttons} />
       <div id="wrapY" className={classes.wrapY} style={{ maxHeight: height }}>
@@ -174,16 +197,25 @@ ScriptureTable.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
   ).isRequired,
   books: PropTypes.arrayOf(
-    PropTypes.shape({
-      headers: PropTypes.array.isRequired,
-      chapters: PropTypes.object.isRequired,
-    })
+    PropTypes.oneOfType([
+      PropTypes.shape({
+        headers: PropTypes.array.isRequired,
+        chapters: PropTypes.object.isRequired,
+      }),
+      PropTypes.shape({
+        json: PropTypes.shape({
+          headers: PropTypes.array.isRequired,
+          chapters: PropTypes.object.isRequired,
+        }),
+      }),
+    ])
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.number,
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    bcvQuery: PropTypes.any,
   }),
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.object,

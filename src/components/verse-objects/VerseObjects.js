@@ -10,6 +10,7 @@ export const VerseObjects = ({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) => {
   const verseObjectComponents = verseObjects.map((verseObject, index) =>
     <VerseObject
@@ -20,6 +21,7 @@ export const VerseObjects = ({
       disableWordPopover={disableWordPopover}
       getLexiconData={getLexiconData}
       translate={translate}
+      reference={reference}
     />
   );
 
@@ -40,6 +42,8 @@ VerseObjects.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
   /** optional function for localization */
   translate: PropTypes.func,
 };

@@ -4,7 +4,7 @@ module.exports = `Book	Chapter	Verse	ID	SupportReference	OrigQuote	Occurrence	GL
 3JN	1	1	w99t	figs-explicit	ὁ πρεσβύτερος	1	The elder	This refers to John, the apostle and disciple of Jesus. He refers to himself as **elder** either because of his old age or because he is a leader in the church. The name of the author can be made explicit: “I, John the elder, am writing” (See: [[rc://en/ta/man/translate/figs-explicit]])
 3JN	1	1	lls6	translate-names	Γαΐῳ	1	Gaius	This is a fellow believer to whom John is writing this letter. (See: [[rc://en/ta/man/translate/translate-names]])
 3JN	1	1	mp9w		ὃν ἐγὼ ἀγαπῶ ἐν ἀληθείᾳ	1	whom I love in truth	**_whom I truly love_**
-3JN	1	2	v6dv		περὶ πάντων…σε εὐοδοῦσθαι καὶ ὑγιαίνειν	1	everything for you to prosper and to be healthy	**_you may do well in all things and be healthy_**
+3JN	1	2	v6dv		περὶ πάντων & σε εὐοδοῦσθαι καὶ ὑγιαίνειν	1	everything for you to prosper and to be healthy	**_you may do well in all things and be healthy_**
 3JN	1	2	i269		καθὼς εὐοδοῦταί σου ἡ ψυχή	1	just as your soul prospers	**_just as you are doing well spiritually_**
 3JN	1	3	b4zh		ἐρχομένων ἀδελφῶν	1	brothers came	**_fellow believers came_**. These people were probably all male.
 3JN	1	3	y7q3	figs-metaphor	σὺ ἐν ἀληθείᾳ περιπατεῖς	1	you are walking in truth	Walking on a path is a metaphor for how a person lives his life. Alternate translation: “you are living your life according to God’s truth” (See: [[rc://en/ta/man/translate/figs-metaphor]])

@@ -1,0 +1,57 @@
+module.exports = {
+  book: 'php',
+  chapter: 2,
+  verse: 1,
+  quote: 'εἴ τις…εἴ τι…εἴ τις…εἴ τις',
+  occurrence: 1,
+  expected: [
+    {
+      text: 'εἴ',
+      occurrence: 1,
+      occurrences: 4,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'τις',
+      occurrence: 1,
+      occurrences: 3,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'εἴ',
+      occurrence: 2,
+      occurrences: 4,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'τι',
+      occurrence: 1,
+      occurrences: 1,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'εἴ',
+      occurrence: 3,
+      occurrences: 4,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'τις',
+      occurrence: 2,
+      occurrences: 3,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'εἴ',
+      occurrence: 4,
+      occurrences: 4,
+      reference: { chapter: 2, verse: 1 },
+    },
+    {
+      text: 'τις',
+      occurrence: 3,
+      occurrences: 3,
+      reference: { chapter: 2, verse: 1 },
+    },
+  ],
+};

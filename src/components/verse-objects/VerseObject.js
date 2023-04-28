@@ -19,6 +19,7 @@ function VerseObject({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   const { type, tag } = verseObject;
   let component;
@@ -30,7 +31,21 @@ function VerseObject({
       );
       break;
     case 'quote':
-      component = <TextObject verseObject={verseObject} />;
+        if(verseObject.children){
+          component = (
+            <MilestoneObject
+              verseObject={verseObject}
+              originalWords={originalWords}
+              disableWordPopover={disableWordPopover}
+              getLexiconData={getLexiconData}
+              translate={translate}
+              reference={reference}
+            />
+          );
+        }else{
+          component = <TextObject verseObject={verseObject} />;
+        }
+
       break;
     case 'milestone':
       component = (
@@ -40,6 +55,7 @@ function VerseObject({
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
           translate={translate}
+          reference={reference}
         />
       );
       break;
@@ -52,6 +68,7 @@ function VerseObject({
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
             translate={translate}
+            reference={reference}
           />
         );
       } else {
@@ -114,6 +131,8 @@ VerseObject.propTypes = {
   disableWordPopover: PropTypes.bool,
   /** optional function to lookup lexicon data */
   getLexiconData: PropTypes.func,
+  /** reference for verse (bookId, chapter, verse) */
+  reference: PropTypes.object,
   /** optional function for localization */
   translate: PropTypes.func,
 };

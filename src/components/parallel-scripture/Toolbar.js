@@ -15,12 +15,12 @@ function Toolbar ({
     <Grid
       container
       direction="row"
-      justify="space-between"
+      justifyContent="space-between"
       alignItems="center"
       className={classes.root}
     >
       <Grid item>
-        <Typography variant='h6' className={classes.title}>
+        <Typography variant="h6" className={classes.title}>
           {title}
         </Typography>
       </Grid>
@@ -34,7 +34,7 @@ function Toolbar ({
 Toolbar.propTypes = {
   title: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf(
-    PropTypes.shape({  
+    PropTypes.shape({
       icon: PropTypes.element.isRequired,
       tooltip: PropTypes.string.isRequired,
       onClick: PropTypes.func,

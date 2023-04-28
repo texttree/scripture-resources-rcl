@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
 import useEffect  from 'use-deep-compare-effect';
@@ -12,14 +12,16 @@ function useSelections({
   quote,
   onQuote,
   verseObjects,
+  reference,
 }) {
 
   useEffect(() => {
-    
+
     const _selections = helpers.selectionsFromQuote({
       quote,
       verseObjects,
       occurrence,
+      reference,
     });
 
     update(_selections);
@@ -36,7 +38,7 @@ function useSelections({
     // the "parsify" function is expecting an array of stringified objects
     // it will return an array of the parsed objects
     // const parsify = (array) => array.map(string => JSON.parse(string));
-    // However, at present, some of the array elements are objecs, 
+    // However, at present, some of the array elements are objecs,
     // not strings. This causes the parse to fail. At present, it is
     // unknown where the mixed bag of an array is created.
     // So let's deal with it here.
@@ -57,7 +59,7 @@ function useSelections({
 
   const isSelected = (word) => helpers.isSelected({word, selections});
 
-  const areSelected = (words) => helpers.areSelected({words, selections});
+  const areSelected = (words, reference) => helpers.areSelected({words, selections, reference});
 
   const addSelection = (word) => {
     let _selections = helpers.addSelection({word, selections});
@@ -103,9 +105,11 @@ useSelections.propTypes = {
   /** the verses where quote may be found */
   verseObjects: PropTypes.array,
   /** if quote occurs mulitple times, this is the occurence of the one selected */
-  occurrence: PropTypes.number,
+  occurrence: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   /** action taken when quote is provided */
   onQuote: PropTypes.func,
+  /** reference */
+  reference: PropTypes.object,
 };
 
 export default useSelections;

@@ -1,4 +1,4 @@
-import tokenizer from 'string-punctuation-tokenizer';
+import {occurrenceInString} from 'string-punctuation-tokenizer';
 
 /**
  * Borrowed and adapted from:
@@ -58,7 +58,7 @@ export const getWordText = (wordObject) => {
  */
 export const getOccurrence = (words, currentWordIndex, subString) => {
   if (typeof words === 'string') {
-    return tokenizer.occurrenceInString(words, currentWordIndex, subString);
+    return occurrenceInString(words, currentWordIndex, subString);
   }
 
   let occurrence = 0;
@@ -78,7 +78,7 @@ export const getOccurrence = (words, currentWordIndex, subString) => {
  */
 export const getOccurrences = (words, subString) => {
   if (typeof words === 'string') {
-    return tokenizer.occurrencesInString(words, subString);
+    return occurrencesInString(words, subString);
   }
 
   let occurrences = 0;

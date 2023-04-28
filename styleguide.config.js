@@ -3,6 +3,7 @@ const upperFirst = require('lodash/upperFirst');
 const camelCase = require('lodash/camelCase');
 const { name, version, repository } = require('./package.json');
 const { styles, theme } = require('./styleguide.styles');
+const webpack = require('webpack');
 
 let sections = [
   {
@@ -212,9 +213,14 @@ module.exports = {
         },
         {
           test: /\.css$/,
-          loader: 'style-loader!css-loader',
+          use: ['style-loader', 'css-loader'],
         },
       ],
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        process: { env: {} },
+      }),
+    ],
   },
 };

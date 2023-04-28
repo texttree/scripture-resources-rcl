@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import useEffectDeep from 'use-deep-compare-effect';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { referenceIdsFromBcvQuery } from './helpers';
 import { ResourcesContext } from '../resources/Resources.context';
-
 import { ScriptureTable } from '../../';
 import { License } from '../license';
 import { localString } from '../../core/localStrings';
@@ -87,6 +87,10 @@ function ParallelScripture({
       if (reference) {
         if (reference.chapter && reference.verse) {
           ref = reference.chapter + ':' + reference.verse;
+        } else if (reference.verse) {
+          ref = reference.verse;
+        } else if (reference.bcvQuery) {
+          ref = String(referenceIdsFromBcvQuery(reference.bcvQuery))
         } else if (reference.chapter) {
           ref = reference.chapter;
         }
@@ -121,7 +125,8 @@ ParallelScripture.propTypes = {
   reference: PropTypes.shape({
     bookId: PropTypes.string,
     chapter: PropTypes.number,
-    verse: PropTypes.number,
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    bcvQuery: PropTypes.any
   }),
   /** pass the quote in */
   quote: PropTypes.string.isRequired,
