@@ -46,7 +46,7 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
       return null;
     }
     //if (book && book.chapters && book.chapters.length > reference.chapter) {
-    console.log(book);
+
     const chapterData = book.json.chapters[reference.chapter];
     let verseData = chapterData && chapterData[reference.verse];
     let range;

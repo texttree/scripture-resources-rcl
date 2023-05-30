@@ -19,14 +19,12 @@ function useSelections({
         verseObjects,
         occurrence,
       });
-      console.log('ue22');
       update(_selections);
     }
   }, [quote, occurrence, verseObjects, update]);
 
   useEffect(() => {
     if (verseObjects && onQuote) {
-      console.log('ue29');
       const _quote = helpers.quoteFromVerse({ selections, verseObjects });
       onQuote(_quote);
     }
@@ -54,7 +52,6 @@ function useSelections({
 
       //const __selections = _selections && deepFreeze(parsify(_selections));
       const __selections = _selections && deepFreeze(_selectionsParsified);
-      console.log('ue57', __selections);
       onSelections(__selections);
     },
     [onSelections],

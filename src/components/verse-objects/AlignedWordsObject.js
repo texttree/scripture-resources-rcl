@@ -33,16 +33,8 @@ function AlignedWordsObject({
   const _selectionsContext = useContext(SelectionsContext);
 
   if (_selectionsContext) {
-    const { state, actions: { areSelected } } = _selectionsContext;
+    const { actions: { areSelected } } = _selectionsContext;
     selected = areSelected(originalWords, reference);
-
-    if (state.verse === reference.verse) {
-      console.log({
-        originalWords,
-        reference,
-        selected,
-      });
-    }
   }
 
   const words = children.map((verseObject, index) => (
