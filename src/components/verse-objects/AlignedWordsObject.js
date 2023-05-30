@@ -16,6 +16,7 @@ function AlignedWordsObject({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,11 +33,16 @@ function AlignedWordsObject({
   const _selectionsContext = useContext(SelectionsContext);
 
   if (_selectionsContext) {
-    const {
-      state: selections,
-      actions: { areSelected, addSelections, removeSelections },
-    } = _selectionsContext;
-    selected = areSelected(originalWords);
+    const { state, actions: { areSelected } } = _selectionsContext;
+    selected = areSelected(originalWords, reference);
+
+    if (state.verse === reference.verse) {
+      console.log({
+        originalWords,
+        reference,
+        selected,
+      });
+    }
   }
 
   const words = children.map((verseObject, index) => (
@@ -80,13 +86,21 @@ function AlignedWordsObject({
     }
 
     // show basic word data if getLexiconData not defined
-    return <OriginalWordObject key={index} verseObject={wordObject} message={message}/>;
+    return (
+      <OriginalWordObject
+        key={index}
+        verseObject={wordObject}
+        message={message}
+      />
+    );
   }
 
   if (!disableWordPopover) {
     const open = Boolean(anchorEl);
     const id = open ? 'popover' : undefined;
-    const _originalWords = originalWords.map((verseObject, index) => getOriginalWordObject(index, verseObject));
+    const _originalWords = originalWords.map((verseObject, index) =>
+      getOriginalWordObject(index, verseObject),
+    );
 
     component = (
       <>
@@ -134,6 +148,7 @@ AlignedWordsObject.propTypes = {
   getLexiconData: PropTypes.func,
   /** optional function for localization */
   translate: PropTypes.func,
+  reference: PropTypes.any,
 };
 
 const useStyles = makeStyles((theme) => ({

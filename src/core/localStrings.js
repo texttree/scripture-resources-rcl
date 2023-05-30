@@ -33,23 +33,25 @@ const strings = {
     StringMissing: 'String Id missing',
     LangNotSupported: 'Language not supported',
   },
-  el: {
-    StringMissing: 'λείπει το εργαλείο',
-  },
+  el: { StringMissing: 'λείπει το εργαλείο' },
 };
 
 export const localString = (id) => {
   let lang = navigator.language.split(/-|_/)[0];
+
   // if language is unknown (not sure this can actually happen)
   if (lang === undefined) {
     lang = 'en';
   }
+
   // if there are no strings for the language
   if (strings[lang] === undefined) {
     lang = 'en';
     return strings[lang]['LangNotSupported'];
   }
+
   let lstring = strings[lang][id];
+
   // if a string for the message id is missing
   if (lstring === undefined) {
     return strings[lang]['StringMissing'];

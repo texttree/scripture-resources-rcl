@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {
-  Typography,
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
-import {
-  VerseObjects,
-} from '..';
+import { VerseObjects } from '..';
 
 export const BookHeaders = ({
   headers,
@@ -29,17 +25,15 @@ export const BookHeaders = ({
 
 BookHeaders.propTypes = {
   headers: PropTypes.array.isRequired,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
 };
 
-const useStyles = makeStyles(theme => ({
-  bookHeaders: {
-  },
-  bookName: {
-  },
+const useStyles = makeStyles(() => ({
+  bookHeaders: {},
+  bookName: {},
 }));
 
 export default BookHeaders;

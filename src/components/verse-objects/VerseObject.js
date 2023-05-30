@@ -19,70 +19,74 @@ function VerseObject({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   const { type, tag } = verseObject;
   let component;
 
   switch (type) {
-    case 'text':
+  case 'text':
+    component = (
+      <TextObject verseObject={verseObject} paragraphs={paragraphs} />
+    );
+    break;
+  case 'quote':
+    component = <TextObject verseObject={verseObject} />;
+    break;
+  case 'milestone':
+    component = (
+      <MilestoneObject
+        verseObject={verseObject}
+        originalWords={originalWords}
+        disableWordPopover={disableWordPopover}
+        getLexiconData={getLexiconData}
+        translate={translate}
+        reference={reference}
+      />
+    );
+    break;
+  case 'word':
+    if (verseObject.strong) {
       component = (
-        <TextObject verseObject={verseObject} paragraphs={paragraphs} />
-      );
-      break;
-    case 'quote':
-      component = <TextObject verseObject={verseObject} />;
-      break;
-    case 'milestone':
-      component = (
-        <MilestoneObject
-          verseObject={verseObject}
-          originalWords={originalWords}
+        <AlignedWordsObject
+          originalWords={[verseObject]}
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
           translate={translate}
+          reference={reference}
+        >
+          {[verseObject]}
+        </AlignedWordsObject>
+      );
+    } else {
+      component = (
+        <WordObject
+          verseObject={verseObject}
+          disableWordPopover={disableWordPopover}
         />
       );
-      break;
-    case 'word':
-      if (verseObject.strong) {
-        component = (
-          <AlignedWordsObject
-            children={[verseObject]}
-            originalWords={[verseObject]}
-            disableWordPopover={disableWordPopover}
-            getLexiconData={getLexiconData}
-            translate={translate}
-          />
-        );
-      } else {
-        component = (
-          <WordObject
-            verseObject={verseObject}
-            disableWordPopover={disableWordPopover}
-          />
-        );
+    }
+    break;
+  case 'section':
+    component = <SectionObject verseObject={verseObject} />;
+    break;
+  case 'paragraph':
+    component = <div />;
+    break;
+  case 'footnote':
+    component = <FootnoteObject verseObject={verseObject} />;
+    break;
+  default:
+    if (tag === 'it') {
+      component = <i>{verseObject.text}</i>;
+    } else if (tag === 'add') {
+      component = <span style={{ color: 'DimGray' }}>{verseObject.text}</span>;
+    } else {
+      if (showUnsupported) {
+        component = <UnsupportedObject verseObject={verseObject} />;
       }
-      break;
-    case 'section':
-      component = <SectionObject verseObject={verseObject} />;
-      break;
-    case 'paragraph':
-      component = <div />;
-      break;
-    case 'footnote':
-      component = <FootnoteObject verseObject={verseObject} />;
-      break;
-    default:
-      if (tag === 'it') {
-        component = <i>{verseObject.text}</i>;
-      } else if (tag === 'add') {
-        component = <span style={{ color: 'DimGray' }}>{verseObject.text}</span>;
-      } else {
-        if (showUnsupported) {
-          component = <UnsupportedObject verseObject={verseObject} />;
-        }
-      }
-      break;
+    }
+    break;
   }
 
   return (
@@ -116,6 +120,7 @@ VerseObject.propTypes = {
   getLexiconData: PropTypes.func,
   /** optional function for localization */
   translate: PropTypes.func,
+  reference: PropTypes.any,
 };
 
 export default VerseObject;

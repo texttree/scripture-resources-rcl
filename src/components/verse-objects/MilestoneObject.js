@@ -6,7 +6,7 @@ import {
   AlignedWordsObject,
 } from '.';
 
-function MilestoneObject ({
+function MilestoneObject({
   originalWords,
   verseObject: {
     tag,
@@ -21,56 +21,61 @@ function MilestoneObject ({
   disableWordPopover,
   getLexiconData,
   translate,
+  reference,
 }) {
   let component;
+
   switch (tag) {
-    case 'k':
-      component = children.map((child, index) =>
+  case 'k':
+    component = children.map((child, index) =>
+      <VerseObject
+        key={index}
+        verseObject={child}
+        disableWordPopover={disableWordPopover}
+        getLexiconData={getLexiconData}
+        translate={translate}
+        reference={reference}
+      />,
+    );
+    break;
+  case 'zaln':
+    const originalWord = {
+      strong,
+      lemma,
+      morph,
+      occurrence,
+      occurrences,
+      content,
+    };
+    let _originalWords = originalWords || [];
+    _originalWords.push(originalWord);
+
+    if (children.length === 1 && children[0].type === 'milestone') {
+      component = (
         <VerseObject
-          key={index}
-          verseObject={child}
+          verseObject={children[0]}
+          originalWords={_originalWords}
           disableWordPopover={disableWordPopover}
           getLexiconData={getLexiconData}
           translate={translate}
+          reference={reference}
         />
       );
-      break;
-    case 'zaln':
-      const originalWord = {
-        strong,
-        lemma,
-        morph,
-        occurrence,
-        occurrences,
-        content,
-      };
-      let _originalWords = originalWords || [];
-      _originalWords.push(originalWord);
-      if (children.length === 1 && children[0].type === 'milestone') {
-        component = (
-          <VerseObject
-            verseObject={children[0]}
-            originalWords={_originalWords}
-            disableWordPopover={disableWordPopover}
-            getLexiconData={getLexiconData}
-            translate={translate}
-          />
-        );
-      } else {
-        component = (
-          <AlignedWordsObject
-            originalWords={_originalWords}
-            children={children}
-            disableWordPopover={disableWordPopover}
-            getLexiconData={getLexiconData}
-            translate={translate}
-          />
-        );
-      }
-      break;
-    default:
-      component = (<span/>);
-      break;
+    } else {
+      component = (
+        <AlignedWordsObject
+          originalWords={_originalWords}
+          disableWordPopover={disableWordPopover}
+          getLexiconData={getLexiconData}
+          translate={translate}
+          reference={reference}
+        >{children}</AlignedWordsObject>
+      );
+    }
+    break;
+  default:
+    component = (<span/>);
+    break;
   }
 
   return (
@@ -99,6 +104,7 @@ MilestoneObject.propTypes = {
   getLexiconData: PropTypes.func,
   /** optional function for localization */
   translate: PropTypes.func,
+  reference: PropTypes.any,
 };
 
 export default MilestoneObject;

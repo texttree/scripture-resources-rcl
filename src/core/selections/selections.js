@@ -9,9 +9,13 @@ export const selectionsFromQuoteAndVerseObjects = ({
   occurrence,
 }) => {
   let selections = [];
+
   if (quote && verseObjects.length > 0) {
     const string = verseObjectsToString(verseObjects);
-    selections = selectionsFromQuoteAndString({ quote, string, occurrence });
+
+    selections = selectionsFromQuoteAndString({
+      quote, string, occurrence,
+    });
   }
   return selections;
 };
@@ -20,11 +24,11 @@ export const getPrecedingOccurrences = (_string, subquote) => {
   const precedingTokens = tokenizer(_string);
   let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
     n,
-    val
+    val,
   ) {
     return n + (val === subquote);
   },
-    0);
+  0);
   return precedingOccurrencesInPreviousString;
 };
 
@@ -51,18 +55,20 @@ export const selectionsFromQuoteAndString = ({
 
   let precedingOccurrences = 0;
   let precedingText = '';
+
   subquotes.forEach((subquote, index) => {
     precedingOccurrences = getPrecedingOccurrences(precedingText, subquote);
     const currentOccurrence = getCurrentOccurrenceFromPrecedingText(
       occurrence,
       index,
-      precedingOccurrences
+      precedingOccurrences,
     );
+
     precedingText = getPrecedingText(
       string,
       subquote,
       currentOccurrence,
-      index
+      index,
     );
 
     const subSelections = subSelectionsFromSubquote({
@@ -89,7 +95,7 @@ export const selectionsFromQuoteAndString = ({
 export const getCurrentOccurrenceFromPrecedingText = (
   occurrence,
   index,
-  precedingOccurrences
+  precedingOccurrences,
 ) => {
   if (occurrence === -1 || index === 0) {
     return occurrence;
@@ -117,7 +123,7 @@ export const getStringFromEllipsis = (_string, quote, occurrence) => {
     lower +
     '.*' +
     upper +
-    ').*'
+    ').*',
   );
   const string = _string.slice(0);
   const matches = string.match(reg) || [];
@@ -155,6 +161,7 @@ export const subSelectionsFromSubquote = ({
   //comparing those characters at this level
   const selectedTokens = subquote.split(' ');
   const subSelections = [];
+
   selectedTokens.forEach((_selectedText) => {
     //Adding the preceding text from the subSelections to ensure that
     //Repeated words are accounted for
@@ -198,11 +205,11 @@ export const generateSelection = ({
   const precedingTokens = tokenizer(precedingText);
   let precedingOccurrencesInPreviousString = precedingTokens.reduce(function (
     n,
-    val
+    val,
   ) {
     return n + (val === selectedText);
   },
-    0);
+  0);
   // calculate this occurrence number by adding it to the preceding ones
   let occurrence = precedingOccurrencesInPreviousString + 1;
   // get the total occurrences from the verse
@@ -228,13 +235,16 @@ export const spliceStringOnRanges = (string, ranges) => {
   let remainingString = string;
   // shift the range since the loop is destructive by working on the remainingString and not original string
   let rangeShift = 0; // start the range shift at the first character
+
   ranges.forEach(function (range) {
     const firstCharacterPosition = range[0] - rangeShift; // original range start - the rangeShift
     const beforeSelection = remainingString.slice(0, firstCharacterPosition); // save all the text before the selection
+
     if (beforeSelection) {
       // only add to the array if string isn't empty
       selectionArray.push({ text: beforeSelection, selected: false });
     }
+
     const shiftedRangeStart = range[0] - rangeShift; // range start - the rangeShift
     const shiftedRangeEnd = range[1] + 1 - rangeShift; // range end - rangeShift + 1 to include last character
     const selection = remainingString.slice(shiftedRangeStart, shiftedRangeEnd); // save the text in the selection
@@ -255,6 +265,7 @@ export const spliceStringOnRanges = (string, ranges) => {
     rangeShift += beforeSelection.length; // adjust the rangeShift by the length prior to the selection
     rangeShift += selection.length; // adjust the rangeShift by the length of the selection itself
   });
+
   if (remainingString) {
     // only add to the array if string isn't empty
     selectionArray.push({ text: remainingString, selected: false });
@@ -270,6 +281,7 @@ export const spliceStringOnRanges = (string, ranges) => {
  */
 export const selectionsToRanges = (string, selections) => {
   let ranges = []; // response
+
   selections.forEach((selection) => {
     if (string && string.includes(selection.text)) {
       // conditions to prevent errors
@@ -307,17 +319,22 @@ export const selectionsToStringSplices = (string, selections) => {
  */
 export const optimizeRanges = (ranges) => {
   let optimizedRanges = []; // response
-  if (ranges.length === 1) return ranges; // if there's only one, return it
+
+  if (ranges.length === 1) {
+    return ranges;
+  } // if there's only one, return it
   ranges = _.sortBy(ranges, (range) => range[1]); // order ranges by end char index as secondary
   ranges = _.sortBy(ranges, (range) => range[0]); // order ranges by start char index as primary
   ranges = _.uniq(ranges); // remove duplicates
   // combine overlapping and contiguous ranges
   let runningRange = []; // the running range to merge overlapping and contiguous ranges
+
   ranges.forEach((currentRange, index) => {
     const currentStart = currentRange[0];
     const currentEnd = currentRange[1];
     let runningStart = runningRange[0];
     let runningEnd = runningRange[1];
+
     if (currentStart >= runningStart && currentStart <= runningEnd + 1) {
       // the start occurs in the running range and +1 handles contiguous
       if (currentEnd >= runningStart && currentEnd <= runningEnd) {
@@ -329,9 +346,12 @@ export const optimizeRanges = (ranges) => {
       }
     } else {
       // the start does not occur in the running range
-      if (runningRange.length !== 0) optimizedRanges.push(runningRange); // the running range is closed push it to optimizedRanges
+      if (runningRange.length !== 0) {
+        optimizedRanges.push(runningRange);
+      } // the running range is closed push it to optimizedRanges
       runningRange = currentRange; // reset the running range to this one
     }
+
     if (ranges.length === index + 1 && runningEnd - runningStart >= 0) {
       // this is the last one and it isn't blank
       optimizedRanges.push(runningRange); // push the last one to optimizedRanges
@@ -368,6 +388,7 @@ export const selectionArray = (string, selections) => {
  */
 export const rangesToSelections = (string, ranges) => {
   let selections = [];
+
   ranges.forEach((range) => {
     const start = range[0]; // set the start point
     const end = range[1]; // set the end point
@@ -382,6 +403,7 @@ export const rangesToSelections = (string, ranges) => {
       occurrence: occurrence,
       occurrences: occurrences,
     };
+
     if (occurrences > 0) {
       // there are some edge cases where empty strings get through but don't have occurrences
       selections.push(selection);
@@ -398,11 +420,15 @@ export const rangesToSelections = (string, ranges) => {
  */
 export const optimizeSelections = (string, selections) => {
   let optimizedSelections; // return
+
   // filter out the random clicks from the UI
   selections = selections.filter((selection) => {
-    const blankSelection = { text: '', occurrence: 1, occurrences: 0 };
+    const blankSelection = {
+      text: '', occurrence: 1, occurrences: 0,
+    };
     return !isEqual(selection, blankSelection);
   });
+
   let ranges = selectionsToRanges(string, selections); // get char ranges of each selection
   ranges = optimizeRanges(ranges); // optimize the ranges
   optimizedSelections = rangesToSelections(string, ranges); // convert optimized ranges into selections
@@ -418,7 +444,7 @@ export const optimizeSelections = (string, selections) => {
 export const removeSelectionFromSelections = (
   selection,
   selections,
-  string
+  string,
 ) => {
   selections = Array.from(selections);
   selections = selections.filter(
@@ -426,7 +452,7 @@ export const removeSelectionFromSelections = (
       !(
         _selection.occurrence === selection.occurrence &&
         _selection.text === selection.text
-      )
+      ),
   );
   selections = optimizeSelections(string, selections);
   return selections;
@@ -453,17 +479,27 @@ export const addSelectionToSelections = (selection, selections, string) => {
  */
 export const getQuoteOccurrencesInVerse = (string, subString) => {
   let n = 0;
-  if (subString.length <= 0) return 0;
+
+  if (subString.length <= 0) {
+    return 0;
+  }
+
   if (subString.split(',').length > 1) {
     let stringArray = subString.split(',');
+
     stringArray.forEach((element) => {
       n += getQuoteOccurrencesInVerse(string, element.trim());
     });
     return n;
   }
-  if (subString.includes('...')) subString = subString.replace('...', '.*');
+
+  if (subString.includes('...')) {
+    subString = subString.replace('...', '.*');
+  }
+
   const regex = new RegExp(`\\W+${subString}\\W+`, 'g');
   let matchedSubstring;
+
   while ((matchedSubstring = regex.exec(string)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matchedSubstring
     if (matchedSubstring.index === regex.lastIndex) {
@@ -483,14 +519,21 @@ export const getQuoteOccurrencesInVerse = (string, subString) => {
  * modified to fit our use cases, return zero for '' substring, and no use case for overlapping.
  */
 export const occurrences = (string, subString) => {
-  if (subString.length <= 0) return 0;
+  if (subString.length <= 0) {
+    return 0;
+  }
+
   let n = 0;
   let pos = 0;
   let step = subString.length;
+
   // eslint-disable-next-line no-constant-condition
   while (true) {
     pos = string.indexOf(subString, pos);
-    if (pos === -1) break;
+
+    if (pos === -1) {
+      break;
+    }
     ++n;
     pos += step;
   }
@@ -521,26 +564,31 @@ export const checkSelectionOccurrences = (string, selections) => {
  * modified to fit our use cases, return zero for '' substring, and no use case for overlapping.
  */
 export const occurrencesInString = (string, subString) => {
-  if (subString.length <= 0) return 0;
+  if (subString.length <= 0) {
+    return 0;
+  }
+
   var occurrences = 0;
   var position = 0;
   var step = subString.length;
+
   while (position < string.length) {
     position = string.indexOf(subString, position);
-    if (position === -1) break;
+
+    if (position === -1) {
+      break;
+    }
     ++occurrences;
     position += step;
   }
   return occurrences;
 };
 
-const tokenizer = (text) => {
-  return tokenize({
-    text: text,
-    greedy: true,
-    normalize: true,
-  });
-};
+const tokenizer = (text) => tokenize({
+  text: text,
+  greedy: true,
+  normalize: true,
+});
 
 export const normalizeString = (string) => {
   const normalized = tokenizer(string).join(' ');

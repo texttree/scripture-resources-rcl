@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 import { resourceFromResourceLink } from '../../core';
 
 // array.slice + re-join for resourceLinks array.
@@ -9,6 +7,7 @@ export const removeResourceLink = (resourceLinks, index) => {
   if (index > 0) {
     let head = resourceLinks.slice(0, index);
     let tail = [];
+
     if (index + 1 >= resourceLinks.length - 1) {
       tail = resourceLinks.slice(index + 1);
     }
@@ -26,21 +25,21 @@ export const tryAddResourceLink = async (
   newResourceLink,
   reference,
   config,
-  onResourceLinks
+  onResourceLinks,
 ) => {
   const isSuccess = await resourceFromResourceLink({
     resourceLink: newResourceLink,
     reference,
     config,
   })
-  .then((_parsedResource) => {
-    if (_parsedResource != null) {
-      onResourceLinks([...resourceLinks, newResourceLink]);
-      return true;
-    } else {
-      return false;
-    }
-  });
-  
+    .then((_parsedResource) => {
+      if (_parsedResource != null) {
+        onResourceLinks([...resourceLinks, newResourceLink]);
+        return true;
+      } else {
+        return false;
+      }
+    });
+
   return isSuccess;
 };

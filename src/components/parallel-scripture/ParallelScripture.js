@@ -11,7 +11,6 @@ import { localString } from '../../core/localStrings';
 function ParallelScripture({
   reference,
   quote,
-  onQuote,
   occurrence,
   height,
   buttons,
@@ -34,7 +33,9 @@ function ParallelScripture({
       if (resource.manifest) {
         const {
           manifest: {
-            dublin_core: { title, version, rights },
+            dublin_core: {
+              title, version, rights,
+            },
           },
         } = resource;
         let branchOrTag = 'tag';

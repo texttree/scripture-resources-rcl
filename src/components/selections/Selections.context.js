@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { useSelections } from '..';
@@ -6,26 +6,25 @@ import { useSelections } from '..';
 export const SelectionsContext = createContext();
 
 export function SelectionsContextProvider({
-    selections,
-    onSelections,
-    occurrence,
-    quote,
-    onQuote,
-    verseObjects,
-    children,
+  selections,
+  onSelections,
+  occurrence,
+  quote,
+  onQuote,
+  verseObjects,
+  children,
 }) {
-
-  let {state, actions} = useSelections({
-      selections: selections,
-      onSelections: onSelections,
-      occurrence: occurrence,
-      quote: quote,
-      onQuote: onQuote,
-      verseObjects: verseObjects,
+  let { state, actions } = useSelections({
+    selections: selections,
+    onSelections: onSelections,
+    occurrence: occurrence,
+    quote: quote,
+    onQuote: onQuote,
+    verseObjects: verseObjects,
   });
 
   return (
-    <SelectionsContext.Provider value={{state, actions}}>
+    <SelectionsContext.Provider value={{ state, actions }}>
       {children}
     </SelectionsContext.Provider>
   );
@@ -44,6 +43,7 @@ SelectionsContextProvider.propTypes = {
   occurrence: PropTypes.number,
   /** action taken when quote is provided */
   onQuote: PropTypes.func,
+  children: PropTypes.any,
 };
 
 export default SelectionsContextProvider;

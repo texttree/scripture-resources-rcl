@@ -3,24 +3,24 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { Tooltip } from '@material-ui/core';
 
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
 
 export const License = ({
   rights,
   licenseLink,
   ...iconProps
 }) => {
-
-  const classes = useStyles();
   const openLink = useCallback((link) => window.open(link, '_blank'), []);
-  const onClickLicense = (e) => { e.stopPropagation(); openLink(licenseLink); }
-  
-  let _iconProps = {
-    onClick: onClickLicense,
-    ...iconProps
+
+  const onClickLicense = (e) => {
+    e.stopPropagation(); openLink(licenseLink);
   };
 
-  let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {..._iconProps} /></Tooltip> ; 
+  let _iconProps = {
+    onClick: onClickLicense,
+    ...iconProps,
+  };
+
+  let rightsIcon = <Tooltip title={rights} arrow><InfoOutlinedIcon {..._iconProps} /></Tooltip> ;
 
   return (
     <>{rightsIcon}</>
@@ -37,10 +37,5 @@ License.propTypes = {
   /** The overriding CSS for this component */
   style: PropTypes.object,
 };
-const useStyles = makeStyles((theme) => ({
-  root: {
-
-  },
-}));
 
 export default License;

@@ -13,7 +13,9 @@ import { Table, TableBody } from '@material-ui/core';
 import deepFreeze from 'deep-freeze';
 import { localString } from '../../core/localStrings';
 
-import { Row, Headers, Toolbar, ColumnsMenu } from '..';
+import {
+  Row, Headers, Toolbar, ColumnsMenu,
+} from '..';
 import { SelectionsContextProvider } from '../selections/Selections.context';
 import {
   referenceIdsFromBooks,
@@ -131,7 +133,7 @@ function ScriptureTable({
         );
         return row;
       }),
-    [_referenceIds, books, open, renderOffscreen, reference, filter, columns]
+    [_referenceIds, books, open, renderOffscreen, reference, filter, columns],
   );
 
   useEffect(() => {
@@ -171,13 +173,13 @@ function ScriptureTable({
 
 ScriptureTable.propTypes = {
   titles: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
       headers: PropTypes.array.isRequired,
       chapters: PropTypes.object.isRequired,
-    })
+    }),
   ).isRequired,
   /** the reference to scroll into view */
   reference: PropTypes.shape({
@@ -204,6 +206,10 @@ ScriptureTable.propTypes = {
   open: PropTypes.bool,
   /** callback to update open state */
   onOpen: PropTypes.func,
+  title: PropTypes.any,
+  height: PropTypes.any,
+  occurrence: PropTypes.any,
+  buttons: PropTypes.any,
 };
 
 const useStyles = makeStyles(() => ({

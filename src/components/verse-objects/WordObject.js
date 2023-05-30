@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const WordObject = ({
-  verseObject,
-}) => {
-  return (
-    <>
-      {verseObject.text || verseObject.content}
-    </>
-  );
-};
+export const WordObject = ({ verseObject }) => (
+  <>
+    {verseObject.text || verseObject.content}
+  </>
+);
 
 WordObject.propTypes = {
   verseObject: PropTypes.shape({

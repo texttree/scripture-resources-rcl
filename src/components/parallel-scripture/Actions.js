@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {Grid, IconButton, Tooltip} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Grid, IconButton, Tooltip,
+} from '@material-ui/core';
 
-function ParallelTitles ({
+function ParallelTitles({
   actions,
   buttons,
 }) {
   const classes = useStyles();
-  const _actions = actions.map(({icon, tooltip, onClick, menu}, index) => {
+  const _actions = actions.map(({
+    icon, tooltip, onClick, menu,
+  }, index) => {
     const button = (
       <Tooltip title={tooltip} arrow >
         <IconButton
@@ -26,7 +30,7 @@ function ParallelTitles ({
         {button}
         {menu}
       </span>
-    )
+    );
   });
 
   return (
@@ -40,25 +44,23 @@ function ParallelTitles ({
       {_actions}
       {buttons}
     </Grid>
-  )
+  );
 };
 
 ParallelTitles.propTypes = {
   actions: PropTypes.arrayOf(
-    PropTypes.shape({  
+    PropTypes.shape({
       icon: PropTypes.element.isRequired,
       tooltip: PropTypes.string.isRequired,
       onClick: PropTypes.func,
     }).isRequired,
   ),
+  buttons: PropTypes.any,
 };
 
-const useStyles = makeStyles(theme => ({
-  root: {
-  },
-  action: {
-    padding: '8px',
-  },
+const useStyles = makeStyles(() => ({
+  root: {},
+  action: { padding: '8px' },
 }));
 
 export default ParallelTitles;

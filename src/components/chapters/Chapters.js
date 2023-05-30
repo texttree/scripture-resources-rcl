@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import useEffect from 'use-deep-compare-effect';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Chapter } from './Chapter';
 
@@ -33,7 +33,7 @@ export const Chapters = ({
           reference={{ ...reference, chapter: chapterKey }}
         />
       );
-      return _chapter
+      return _chapter;
     });
     setChapters(__chapters);
   }, [chapters, paragraphs, renderOffscreen, direction, disableWordPopover, showUnsupported, reference]);
@@ -51,17 +51,15 @@ Chapters.propTypes = {
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  reference: PropTypes.any,
 };
 
-const useStyles = makeStyles(theme => ({
-  chapters: {
-  },
-}));
+const useStyles = makeStyles(() => ({ chapters: {} }));
 
 export default Chapters;

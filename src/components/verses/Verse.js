@@ -1,12 +1,14 @@
-import React, {useCallback, useContext, useState, useEffect, useRef} from 'react';
+import React, {
+  useCallback, useContext, useState, useEffect, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {Skeleton} from '@material-ui/lab';
-import {Waypoint} from 'react-waypoint';
+import { makeStyles } from '@material-ui/core/styles';
+import { Skeleton } from '@material-ui/lab';
+import { Waypoint } from 'react-waypoint';
 
-import {VerseObjects} from '../verse-objects';
-import { useHandleCopy } from './helpers';
+import { VerseObjects } from '../verse-objects';
 import { ReferenceSelectedContext } from '../reference/ReferenceSelectedContext';
+import { useHandleCopy } from './helpers';
 
 export const Verse = ({
   verseKey,
@@ -24,13 +26,16 @@ export const Verse = ({
   const update = referenceSelectedContext?.actions?.update;
 
   const verseRef = useRef(null);
-  useHandleCopy(verseRef.current)
+  useHandleCopy(verseRef.current);
 
   const classes = useStyles();
 
   const onVisibility = (isVisible) => {
-    if (isVisible) setViewed(true);
+    if (isVisible) {
+      setViewed(true);
+    }
   };
+
   const width = `${((Math.random() +1)/2 * 100).toFixed(0)}%`;
   const skeleton = (
     <>
@@ -44,6 +49,7 @@ export const Verse = ({
   useEffect(() => {
     if (viewed) {
       let verseNumber;
+
       if (!['front','back'].includes(verseKey)) {
         verseNumber = <sup>{verseKey} </sup>;
       }
@@ -58,21 +64,28 @@ export const Verse = ({
             disableWordPopover={disableWordPopover}
             getLexiconData={getLexiconData}
             translate={translate}
+            reference={reference}
           />
         </>
       );
       setVerse(_verse);
     }
-  }, [verseKey, verseObjects, paragraphs, showUnsupported, disableWordPopover, viewed]);
+  }, [verseKey, verseObjects, paragraphs, showUnsupported, disableWordPopover, viewed, getLexiconData, translate, reference]);
 
   const handleClick = useCallback(reference => {
-    const _reference = {...reference, verse: parseInt(verseKey) };
-    if (update) update(_reference);
+    const _reference = { ...reference, verse: parseInt(verseKey) };
+
+    if (update) {
+      update(_reference);
+    }
     /** WARN: ReferenceSelectedContext is not part of useCallback dependencies! */
-  }, [update]);
+  }, [update, verseKey]);
 
   const style = {};
-  if (paragraphs) style.display = 'inline';
+
+  if (paragraphs) {
+    style.display = 'inline';
+  }
 
   return (
     <div ref={verseRef} className={classes.verse} style={style} dir={direction} onClick={() => handleClick(reference)}>
@@ -102,9 +115,6 @@ Verse.propTypes = {
   translate: PropTypes.func,
 };
 
-const useStyles = makeStyles(theme => ({
-  verse: {
-  },
-}));
+const useStyles = makeStyles();
 
 export default Verse;

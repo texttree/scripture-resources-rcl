@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Badge,
   Popover,
   Typography,
 } from '@material-ui/core';
 
-function UnsupportedObject ({
-  verseObject,
-}) {
+function UnsupportedObject({ verseObject }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -69,12 +67,8 @@ UnsupportedObject.propTypes = {
 };
 
 const useStyles = makeStyles(theme => ({
-  footnote: {
-    padding: theme.spacing(2),
-  },
-  badge: {
-    margin: theme.spacing(2),
-  },
+  footnote: { padding: theme.spacing(2) },
+  badge: { margin: theme.spacing(2) },
 }));
 
 export default UnsupportedObject;

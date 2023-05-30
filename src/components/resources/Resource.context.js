@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import PropTypes, { func } from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { useResource } from '..';
 
@@ -44,6 +44,9 @@ ResourceContextProvider.propTypes = {
   }),
   /** action taken after a resource is acquired */
   onResource: PropTypes.func.isRequired,
+  onResourceLink: PropTypes.any,
+  reference: PropTypes.any,
+  children: PropTypes.any,
 };
 
 export default ResourceContextProvider;

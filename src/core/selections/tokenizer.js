@@ -1,4 +1,4 @@
-import {tokenize} from 'string-punctuation-tokenizer';
+import { tokenize } from 'string-punctuation-tokenizer';
 
 export const tokenizer = (text) => {
   const options = {

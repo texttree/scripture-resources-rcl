@@ -55,7 +55,7 @@ function useResources({
         config,
         onResourceLinks,
       );
-      
+
       return isSuccess;
     },
     [config, onResourceLinks, reference, resourceLinks],

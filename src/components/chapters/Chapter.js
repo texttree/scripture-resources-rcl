@@ -1,13 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
-import {
-  Typography,
-} from '@material-ui/core';
-import {
-  Skeleton,
-} from '@material-ui/lab';
-import {Waypoint} from 'react-waypoint';
+import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { Waypoint } from 'react-waypoint';
 
 import { Verses } from '../verses/Verses';
 
@@ -19,14 +15,17 @@ export const Chapter = ({
   showUnsupported,
   direction,
   disableWordPopover,
-  reference
+  reference,
 }) => {
   const classes = useStyles();
   const [viewed, setViewed] = useState(!renderOffscreen);
-  
+
   const onVisibility = (isVisible) => {
-    if (isVisible) setViewed(true);
+    if (isVisible) {
+      setViewed(true);
+    }
   };
+
   const height = Object.keys(chapter).length * 20;
   const skeleton = (
     <>
@@ -51,7 +50,7 @@ export const Chapter = ({
       );
       setVerses(_verses);
     }
-  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported, disableWordPopover, direction]);
+  }, [chapterKey, chapter, paragraphs, viewed, showUnsupported, disableWordPopover, direction, reference, renderOffscreen]);
 
   return (
     <div className={classes.chapter} dir={direction}>
@@ -68,17 +67,15 @@ Chapter.propTypes = {
   paragraphs: PropTypes.bool,
   /** bypass rendering only when visible */
   renderOffscreen: PropTypes.bool,
-  /** render unsupported usfm markers */ 
+  /** render unsupported usfm markers */
   showUnsupported: PropTypes.bool,
   /** override text direction detection */
   direction: PropTypes.string,
   /** disable popovers for aligned and original language words */
   disableWordPopover: PropTypes.bool,
+  reference: PropTypes.any,
 };
 
-const useStyles = makeStyles(theme => ({
-  chapter: {
-  },
-}));
+const useStyles = makeStyles(() => ({ chapter: {} }));
 
 export default Chapter;

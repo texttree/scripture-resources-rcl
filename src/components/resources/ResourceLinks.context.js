@@ -46,6 +46,7 @@ ResourceLinksContextProvider.propTypes = {
   }),
   /** action taken after a resource is acquired */
   onResources: PropTypes.func.isRequired,
+  children: PropTypes.any,
 };
 
 export default ResourceLinksContextProvider;

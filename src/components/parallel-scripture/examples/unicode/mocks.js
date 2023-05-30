@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { normalizeString } from '../../../../core/selections/selections';
-import { makeStyles } from '@material-ui/core/styles';
 
-import ResourcesContextProvider from '../../../resources/Resources.context';
+import { ResourcesContextProvider } from '../../../resources/Resources.context';
 import ParallelScripture from '../../../parallel-scripture/ParallelScripture';
-import useEffect from 'use-deep-compare-effect';
 
 export const charactersExample1 = [
   'טֵּ֕',
@@ -30,9 +29,7 @@ const generateResourceLinks = ({ bookId, testament }) => {
   const allResourceLinks = [originalLink, enUltResourceLink, enUstResourceLink];
 
   // Add bookId to all resource paths:
-  const allResourceLinksWithBookId = allResourceLinks.map((link) => {
-    return link + '/' + bookId;
-  });
+  const allResourceLinksWithBookId = allResourceLinks.map((link) => link + '/' + bookId);
 
   return allResourceLinksWithBookId;
 };
@@ -47,15 +44,15 @@ export function ParallelScriptureMock({
   const _defaultResourceLinks = generateResourceLinks({ bookId, testament });
 
   const [resourceLinks, setResourceLinks] = React.useState(
-    _defaultResourceLinks
+    _defaultResourceLinks,
   );
   const [resources, setResources] = React.useState([]);
 
-  const reference = { bookId, chapter, verse };
+  const reference = {
+    bookId, chapter, verse,
+  };
 
   const config = { server: 'https://git.door43.org' };
-
-  const classes = useStyles();
 
   return (
     <>
@@ -63,37 +60,35 @@ export function ParallelScriptureMock({
         <tr>
           <th>String</th>
           <th style={{ borderRight: '1px solid black' }}>===</th>
-          <th colspan='2' style={{ borderRight: '1px solid black' }}>
+          <th colSpan="2" style={{ borderRight: '1px solid black' }}>
             string.normalize('NFKC')
           </th>
-          <th colspan='2' style={{ borderRight: '1px solid black' }}>
+          <th colSpan="2" style={{ borderRight: '1px solid black' }}>
             string-punctuation-tokenizer
           </th>
         </tr>
-        {selections.map((currentSelection) => {
-          return (
-            <tr>
-              <td>{currentSelection}</td>
-              <td style={{ borderRight: '1px solid black' }}>
-                {selections[0] === currentSelection ? 'Match' : 'No match'}
-              </td>
-              <td>{currentSelection.normalize('NFKC')}</td>
-              <td style={{ borderRight: '1px solid black' }}>
-                {selections[0].normalize('NFKC') ===
-                  currentSelection.normalize('NFKC')
-                  ? 'Match'
-                  : 'No match'}
-              </td>
-              <td>{normalizeString(currentSelection)}</td>
-              <td style={{ borderRight: '1px solid black' }}>
-                {normalizeString(selections[0]) ===
-                  normalizeString(currentSelection)
-                  ? 'Match'
-                  : 'No match! ☹️'}
-              </td>
-            </tr>
-          );
-        })}
+        {selections.map((currentSelection, index) => (
+          <tr key={index}>
+            <td>{currentSelection}</td>
+            <td style={{ borderRight: '1px solid black' }}>
+              {selections[0] === currentSelection ? 'Match' : 'No match'}
+            </td>
+            <td>{currentSelection.normalize('NFKC')}</td>
+            <td style={{ borderRight: '1px solid black' }}>
+              {selections[0].normalize('NFKC') ===
+              currentSelection.normalize('NFKC')
+                ? 'Match'
+                : 'No match'}
+            </td>
+            <td>{normalizeString(currentSelection)}</td>
+            <td style={{ borderRight: '1px solid black' }}>
+              {normalizeString(selections[0]) ===
+              normalizeString(currentSelection)
+                ? 'Match'
+                : 'No match! ☹️'}
+            </td>
+          </tr>
+        ))}
       </table>
 
       <br />
@@ -106,24 +101,24 @@ export function ParallelScriptureMock({
         onResources={setResources}
         config={config}
       >
-        {selections.map((currentSelection) => {
-          const [quote, setQuote] = React.useState('');
-
-          return (
-            <ParallelScripture
-              reference={reference}
-              quote={currentSelection}
-              onQuote={setQuote}
-              occurrence={1}
-              height='250px'
-            />
-          );
-        })}
+        {selections.map((currentSelection, index) => (
+          <ParallelScripture
+            reference={reference}
+            quote={currentSelection}
+            occurrence={1}
+            height="250px"
+            key={index}
+          />
+        ))}
       </ResourcesContextProvider>
     </>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {},
-}));
+ParallelScriptureMock.propTypes = {
+  bookId: PropTypes.any,
+  testament: PropTypes.any,
+  chapter: PropTypes.any,
+  verse: PropTypes.any,
+  selections: PropTypes.any,
+};

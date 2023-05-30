@@ -12,8 +12,10 @@ import tokenizer from 'string-punctuation-tokenizer';
  */
 export const flattenVerseObjects = (verseObjects, flat = []) => {
   let _verseObjects = [...verseObjects];
+
   while (_verseObjects.length > 0) {
     const object = _verseObjects.shift();
+
     if (object) {
       if (object.type === 'milestone') { // get children of milestone
         const _flat = flattenVerseObjects(object.children);
@@ -62,9 +64,12 @@ export const getOccurrence = (words, currentWordIndex, subString) => {
   }
 
   let occurrence = 0;
+
   if (Array.isArray(words)) {
     words.forEach((word, index) => {
-      if (index <= currentWordIndex && getWordText(word) === subString) occurrence++;
+      if (index <= currentWordIndex && getWordText(word) === subString) {
+        occurrence++;
+      }
     });
   }
   return occurrence;
@@ -82,9 +87,12 @@ export const getOccurrences = (words, subString) => {
   }
 
   let occurrences = 0;
+
   if (Array.isArray(words)) {
     words.forEach(word => {
-      if (getWordText(word) === subString) occurrences++;
+      if (getWordText(word) === subString) {
+        occurrences++;
+      }
     });
   }
   return occurrences;
@@ -97,14 +105,20 @@ export const getOccurrences = (words, subString) => {
  */
 export const occurrenceInjectVerseObjects = (verseObjects) => {
   let _verseObjects = [];
+
   if (verseObjects && verseObjects.length > 0) {
     const flattenedVerseObjects = flattenVerseObjects(verseObjects);
+
     _verseObjects = flattenedVerseObjects.map((verseObject, index) => {
       let _verseObject = { ...verseObject };
+
       if (verseObject.type === 'word') {
         const occurrence = getOccurrence(flattenedVerseObjects, index, verseObject.text);
         const occurrences = getOccurrences(flattenedVerseObjects, verseObject.text);
-        _verseObject = { ...verseObject, occurrence, occurrences };
+
+        _verseObject = {
+          ...verseObject, occurrence, occurrences,
+        };
       }
       return _verseObject;
     });

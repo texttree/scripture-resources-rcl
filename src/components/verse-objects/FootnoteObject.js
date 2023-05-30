@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Badge,
   Popover,
   Typography,
 } from '@material-ui/core';
 
-function FootnoteObject ({
-  verseObject,
-}) {
+function FootnoteObject({ verseObject }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -67,9 +65,7 @@ FootnoteObject.propTypes = {
 };
 
 const useStyles = makeStyles(theme => ({
-  footnote: {
-    padding: theme.spacing(1),
-  },
+  footnote: { padding: theme.spacing(1) },
   badge: {
     margin: theme.spacing(1),
     top: theme.spacing(1),

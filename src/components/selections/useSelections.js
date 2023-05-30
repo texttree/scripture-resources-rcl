@@ -1,7 +1,6 @@
-import React, { useCallback } from "react";
+import { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import deepFreeze from 'deep-freeze';
-import useEffect  from 'use-deep-compare-effect';
 
 import * as helpers from './helpers';
 
@@ -13,69 +12,80 @@ function useSelections({
   onQuote,
   verseObjects,
 }) {
-
   useEffect(() => {
-    
-    const _selections = helpers.selectionsFromQuote({
-      quote,
-      verseObjects,
-      occurrence,
-    });
-
-    update(_selections);
-  }, [quote, occurrence, verseObjects]);
+    if (verseObjects) {
+      const _selections = helpers.selectionsFromQuote({
+        quote,
+        verseObjects,
+        occurrence,
+      });
+      console.log('ue22');
+      update(_selections);
+    }
+  }, [quote, occurrence, verseObjects, update]);
 
   useEffect(() => {
     if (verseObjects && onQuote) {
-      const _quote = helpers.quoteFromVerse({selections, verseObjects});
+      console.log('ue29');
+      const _quote = helpers.quoteFromVerse({ selections, verseObjects });
       onQuote(_quote);
     }
   }, [selections, onQuote, verseObjects]);
 
-  const update = useCallback((_selections) => {
-    // the "parsify" function is expecting an array of stringified objects
-    // it will return an array of the parsed objects
-    // const parsify = (array) => array.map(string => JSON.parse(string));
-    // However, at present, some of the array elements are objecs, 
-    // not strings. This causes the parse to fail. At present, it is
-    // unknown where the mixed bag of an array is created.
-    // So let's deal with it here.
-    let _selectionsParsified = [];
-    for (let i=0; i < _selections.length; i++) {
-      try {
-        let x = JSON.parse(_selections[i]);
-        _selectionsParsified.push(x);
-      } catch (error) {
-        _selectionsParsified.push(_selections[i]);
+  const update = useCallback(
+    (_selections) => {
+      // the "parsify" function is expecting an array of stringified objects
+      // it will return an array of the parsed objects
+      // const parsify = (array) => array.map(string => JSON.parse(string));
+      // However, at present, some of the array elements are objecs,
+      // not strings. This causes the parse to fail. At present, it is
+      // unknown where the mixed bag of an array is created.
+      // So let's deal with it here.
+      let _selectionsParsified = [];
+
+      for (let i = 0; i < _selections.length; i++) {
+        try {
+          let x = JSON.parse(_selections[i]);
+          _selectionsParsified.push(x);
+        } catch (error) {
+          _selectionsParsified.push(_selections[i]);
+        }
       }
 
-    }
-    //const __selections = _selections && deepFreeze(parsify(_selections));
-    const __selections = _selections && deepFreeze(_selectionsParsified);
-    onSelections(__selections);
-  }, [onSelections]);
+      //const __selections = _selections && deepFreeze(parsify(_selections));
+      const __selections = _selections && deepFreeze(_selectionsParsified);
+      console.log('ue57', __selections);
+      onSelections(__selections);
+    },
+    [onSelections],
+  );
 
-  const isSelected = (word) => helpers.isSelected({word, selections});
+  const isSelected = (word) => helpers.isSelected({ word, selections });
 
-  const areSelected = (words) => helpers.areSelected({words, selections});
+  const areSelected = (words, reference) =>
+    helpers.areSelected({
+      words,
+      selections,
+      reference,
+    });
 
   const addSelection = (word) => {
-    let _selections = helpers.addSelection({word, selections});
+    let _selections = helpers.addSelection({ word, selections });
     update(_selections);
   };
 
   const addSelections = (words) => {
-    let _selections = helpers.addSelections({words, selections});
+    let _selections = helpers.addSelections({ words, selections });
     update(_selections);
   };
 
   const removeSelection = (word) => {
-    const _selections = helpers.removeSelection({word, selections});
+    const _selections = helpers.removeSelection({ word, selections });
     update(_selections);
   };
 
   const removeSelections = (words) => {
-    let _selections = helpers.removeSelections({words, selections});
+    let _selections = helpers.removeSelections({ words, selections });
     update(_selections);
   };
 
@@ -91,7 +101,7 @@ function useSelections({
       removeSelections,
     },
   };
-};
+}
 
 useSelections.propTypes = {
   /** words in a selection */

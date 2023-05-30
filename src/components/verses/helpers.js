@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from 'react';
 
 export function useHandleCopy(el) {
   const handleCopy = useCallback((e) => {
     let text = window.getSelection().toString();
     e.clipboardData.setData('text/plain', text);
     e.preventDefault();
-    }, []);
+  }, []);
 
   useEffect(() => {
     if (el) {

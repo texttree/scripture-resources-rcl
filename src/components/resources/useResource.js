@@ -8,7 +8,6 @@ import { resourceFromResourceLink } from '../../core';
 function useResource({
   resource,
   resourceLink,
-  onResourceLink,
   reference,
   config,
   onResource,

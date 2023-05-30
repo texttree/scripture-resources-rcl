@@ -21,4 +21,5 @@ export function UsfmContextProvider({
 UsfmContextProvider.propTypes = {
   /** The usfm string to parse */
   usfm: PropTypes.string.isRequired,
+  children: PropTypes.any,
 };

@@ -10,20 +10,22 @@ export function ReferenceSelectedContextProvider({
   onReferenceSelected,
   children,
 }) {
-    const val = useReferenceSelected({
-      referenceSelected,
-      onReferenceSelected,
-    });
+  const val = useReferenceSelected({
+    referenceSelected,
+    onReferenceSelected,
+  });
 
-    return (
-        <ReferenceSelectedContext.Provider value={val}>
-          {children}
-        </ReferenceSelectedContext.Provider>
-    );
+  return (
+    <ReferenceSelectedContext.Provider value={val}>
+      {children}
+    </ReferenceSelectedContext.Provider>
+  );
 }
 
 ReferenceSelectedContextProvider.propTypes = {
-    reference: PropTypes.arrayOf(PropTypes.object),
+  referenceSelected: PropTypes.any,
+  onReferenceSelected: PropTypes.any,
+  children: PropTypes.any,
 };
 
 export default ReferenceSelectedContextProvider;

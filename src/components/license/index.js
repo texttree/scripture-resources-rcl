@@ -1,1 +1,1 @@
-export {default as License} from './License';
+export { default as License } from './License';

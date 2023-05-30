@@ -20,20 +20,18 @@ function ColumnsMenu({
 }) {
   const { state, actions } = React.useContext(ResourcesContext);
   const { resources } = state || {};
-  
-const [isResourceAddError, setIsResourceAddError] = React.useState(false);
+
+  const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   const onResourceAddClick = async () => {
-    if (actions && actions.addResourceLink)
-    {
+    if (actions && actions.addResourceLink) {
       const isSuccess = await actions.addResourceLink(resourceUrl.value);
       setIsResourceAddError(!isSuccess);
     }
   };
 
   const removeResourceLink = (index) => {
-    if (actions && actions.remove)
-    {
+    if (actions && actions.remove) {
       actions.remove(index);
     }
   };
@@ -96,14 +94,14 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
   return (
     <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={onCloseMenu}>
-      <MenuItem style={{justifyContent: "flex-end"}}>
-        <IconButton 
-          aria-label='Close' 
-          onClick={onCloseMenu} 
+      <MenuItem style={{ justifyContent: 'flex-end' }}>
+        <IconButton
+          aria-label='Close'
+          onClick={onCloseMenu}
           className={classes.close}
           disabled={false}
         >
-          <CloseIcon fontSize='small' /> 
+          <CloseIcon fontSize='small' />
         </IconButton>
       </MenuItem>
 
@@ -119,7 +117,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
 
       {menuItems}
 
-      {actions && actions.addResourceLink && 
+      {actions && actions.addResourceLink &&
         <MenuItem>
           <TextField
             id='resourceUrl'
@@ -141,7 +139,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
         </MenuItem>
       }
 
-      {isResourceAddError && 
+      {isResourceAddError &&
         <MenuItem
           key={'text'}
           disabled
@@ -158,7 +156,7 @@ const [isResourceAddError, setIsResourceAddError] = React.useState(false);
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   action: { padding: '8px' },
   close: { padding: '0px' },

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
+import { isHebrew } from '../../core';
 import { Verse } from '.';
-import {isHebrew} from '../../core';
 
 export const Verses = ({
   verses,
@@ -26,15 +26,20 @@ export const Verses = ({
     if (!direction) {
       const verseText = verses['1'].verseObjects.map(verseObject => verseObject.text).join('');
       const hebrew = isHebrew(verseText);
-      if (hebrew) setDir('rtl');
-      else setDir('auto');
+
+      if (hebrew) {
+        setDir('rtl');
+      } else {
+        setDir('auto');
+      }
     }
   }, [verses, direction]);
 
   useEffect(() => {
     let __verses = [];
+
     Object.keys(verses).forEach((verseKey, index) => {
-      const {verseObjects} = verses[verseKey];
+      const { verseObjects } = verses[verseKey];
       const verse = (
         <Verse
           key={index}
@@ -43,19 +48,24 @@ export const Verses = ({
           paragraphs={paragraphs}
           showUnsupported={showUnsupported}
           disableWordPopover={disableWordPopover}
-          reference={ {...reference, verse: verseKey} }
+          reference={ { ...reference, verse: verseKey } }
           renderOffscreen={renderOffscreen}
           getLexiconData={getLexiconData}
           translate={translate}
         />
       );
-      if (verseKey === 'front') setFront(verse);
-      else if (verseKey === 'back') setBack(verse);
-      else __verses.push(verse);
+
+      if (verseKey === 'front') {
+        setFront(verse);
+      } else if (verseKey === 'back') {
+        setBack(verse);
+      } else {
+        __verses.push(verse);
+      }
     });
 
     setVerses(__verses);
-  }, [verses, paragraphs, showUnsupported, disableWordPopover]);
+  }, [verses, paragraphs, showUnsupported, disableWordPopover, reference, renderOffscreen, getLexiconData, translate]);
 
   return (
     <div className={classes.verses} dir={dir}>
@@ -86,9 +96,6 @@ Verses.propTypes = {
   translate: PropTypes.func,
 };
 
-const useStyles = makeStyles(theme => ({
-  verses: {
-  },
-}));
+const useStyles = makeStyles();
 
 export default Verses;

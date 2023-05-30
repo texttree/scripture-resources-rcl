@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   TableHead,
   TableRow,
   TableCell,
 } from '@material-ui/core';
 
-function Headers ({
-  columns,
-}) {
+function Headers({ columns }) {
   const classes = useStyles();
   const _titles = columns.filter(col => !col.hidden).map(column => (
     <TableCell
@@ -27,16 +25,13 @@ function Headers ({
         {_titles}
       </TableRow>
     </TableHead>
-  )
+  );
 };
 
-Headers.propTypes = {
-  columns: PropTypes.array.isRequired,
-};
+Headers.propTypes = { columns: PropTypes.array.isRequired };
 
 const useStyles = makeStyles(theme => ({
-  root: {
-  },
+  root: {},
   cell: {
     position: 'sticky',
     top: '0px',

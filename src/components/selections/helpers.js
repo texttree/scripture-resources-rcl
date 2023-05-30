@@ -6,7 +6,9 @@ import {
 // const stringify = (array) => array.map(object => JSON.stringify(object));
 //export const parsify = (array) => array.map(string => JSON.parse(string));
 
-export const selectionsFromQuote = ({ quote, verseObjects, occurrence }) => {
+export const selectionsFromQuote = ({
+  quote, verseObjects, occurrence,
+}) => {
   let selections = [];
 
   if (quote && verseObjects && occurrence) {
@@ -23,7 +25,7 @@ export const quoteFromVerse = ({ selections, verseObjects }) => {
   let quotedWords = new Array(verseObjects.length);
   const _selections = selections.map((selection) => JSON.parse(selection).text);
 
-  verseObjects.forEach((verseObject, index) => {
+  verseObjects.forEach((verseObject) => {
     const { type, text } = verseObject;
 
     if (type === 'word') {
@@ -51,7 +53,9 @@ export const quoteFromVerse = ({ selections, verseObjects }) => {
 // };
 
 export const selectionFromWord = (word) => {
-  const { content, text, occurrence, occurrences } = word;
+  const {
+    content, text, occurrence, occurrences,
+  } = word;
   const selectionObject = {
     text: content || text,
     occurrence: parseInt(occurrence),
@@ -67,23 +71,35 @@ export const isSelected = ({ word, selections }) => {
   return selected;
 };
 
-export const areSelected = ({ words, selections }) => {
+export const areSelected = ({
+  words,
+  selections,
+  reference = { chapter: 100, verse: 100 },
+}) => {
   let selected = false;
+
   const _selections = words.map((word) => selectionFromWord(word));
 
   _selections.forEach((selection) => {
-    //if (selections.includes(_s)) selected = true;
     const _selection = JSON.parse(selection);
     let _text = normalizeString(_selection.text);
     let _occ = _selection.occurrence;
     let _occs = _selection.occurrences;
+    let { chapter: _ch = 100, verse: _v = 100 } = reference;
 
     for (let i = 0; i < selections.length; i++) {
       const text = selections[i].text; //already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
+      const { chapter: ch = 100, verse: v = 100 } = selections[i].reference;
 
-      if (text === _text && occ === _occ && occs === _occs) {
+      if (
+        text === _text &&
+        occ === _occ &&
+        occs === _occs &&
+        parseInt(ch) === parseInt(_ch) &&
+        parseInt(v) === parseInt(_v)
+      ) {
         selected = true;
         break;
       }
@@ -112,7 +128,7 @@ export const addSelections = ({ words, selections }) => {
 export const removeSelection = ({ word, selections }) => {
   const selection = selectionFromWord(word);
   const selectionStringified = selections.map((_selection) =>
-    selectionFromWord(_selection)
+    selectionFromWord(_selection),
   );
   const _selections = new Set(selectionStringified);
   _selections.delete(selection);
@@ -121,7 +137,7 @@ export const removeSelection = ({ word, selections }) => {
 
 export const removeSelections = ({ words, selections }) => {
   const selectionStringified = selections.map((selection) =>
-    selectionFromWord(selection)
+    selectionFromWord(selection),
   );
   const _selections = new Set(selectionStringified);
 

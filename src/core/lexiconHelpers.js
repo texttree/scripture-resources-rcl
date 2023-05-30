@@ -1,69 +1,89 @@
-import { getFile } from "./resources";
+import { getFile } from './resources';
 
 export function getLexiconResourceID(isNt) {
   const resourceId = isNt ? 'ugl' : 'uhal';
   return resourceId;
 }
 
-export const parseSenses = ({lexiconMarkdown}) => {
+export const parseSenses = ({ lexiconMarkdown }) => {
   let uniqueSenses = [];
+
   if (lexiconMarkdown) {
     let senses = [];
     const sensesSection = lexiconMarkdown.split(/##\s*Senses/)[1];
     const senseSections = sensesSection.split(/###\s*Sense/).splice(1);
-    senseSections.forEach(senseSection => {
+
+    senseSections.forEach((senseSection) => {
       const definitionRegexp = /####\s*Definitions?.*?[\n\s]+(.*?)\n/;
       const glossRegexp = /####\s*Glosse?s?.*?[\n\s]+(.*?)\n/;
-      let definition = definitionRegexp.test(senseSection) ? definitionRegexp.exec(senseSection)[1] : null;
-      definition = (!/#/.test(definition)) ? definition : null;
-      let gloss = glossRegexp.test(senseSection) ? glossRegexp.exec(senseSection)[1] : null;
-      gloss = (!/#/.test(gloss)) ? gloss : null;
+      let definition = definitionRegexp.test(senseSection)
+        ? definitionRegexp.exec(senseSection)[1]
+        : null;
+      definition = !/#/.test(definition) ? definition : null;
+      let gloss = glossRegexp.test(senseSection)
+        ? glossRegexp.exec(senseSection)[1]
+        : null;
+      gloss = !/#/.test(gloss) ? gloss : null;
       const sense = {
         definition: definition,
         gloss: gloss,
       };
       senses.push(sense);
     });
-    uniqueSenses = unique({array: senses});
+    uniqueSenses = unique({ array: senses });
   }
   return uniqueSenses;
 };
 
-export async function senses({strong}) {
+export async function senses({ strong }) {
   let senses, repository, path;
+
   if (/H\d+/.test(strong)) {
     repository = 'en_uhal';
     const _strong = strong.match(/H\d+/)[0];
     path = `content/${_strong}.md`;
   }
+
   if (/G\d+/.test(strong)) {
     repository = 'en_ugl';
     path = `content/${strong}/01.md`;
   }
-  if (repository && path) {
-    const lexiconMarkdown = await getFile({username: 'unfoldingword', repository, path, config: {
-      server: "https://git.door43.org",
-      cache: {
-        maxAge: 365 * 24 * 60 * 60 * 1000, // override cache to 1 year
-      },
-    }});
-    senses = parseSenses({lexiconMarkdown});
-  }
-  if (!senses) throw(Error(`Could not find sense info for: ${strong}`));
-  return senses;
-};
 
-export const unique = ({array, response=[]}) => {
+  if (repository && path) {
+    const lexiconMarkdown = await getFile({
+      username: 'unfoldingword',
+      repository,
+      path,
+      config: {
+        server: 'https://git.door43.org',
+        // override cache to 1 year
+        cache: { maxAge: 365 * 24 * 60 * 60 * 1000 },
+      },
+    });
+    senses = parseSenses({ lexiconMarkdown });
+  }
+
+  if (!senses) {
+    throw Error(`Could not find sense info for: ${strong}`);
+  }
+  return senses;
+}
+
+export const unique = ({ array }) => {
   let _array = array;
-  array.forEach(object => {
-    _array = _array.filter(_object =>
-      !(object.gloss === _object.gloss && object.definition === _object.definition)
+
+  array.forEach((object) => {
+    _array = _array.filter(
+      (_object) =>
+        !(
+          object.gloss === _object.gloss &&
+          object.definition === _object.definition
+        ),
     );
     _array.push(object);
   });
   return _array;
-}
-
+};
 
 /**
  * iterate through word objects to get list of strongs numbers found
@@ -71,7 +91,9 @@ export const unique = ({array, response=[]}) => {
  * @return {string[]}
  */
 export function getStrongsList(wordObjects) {
-  const strongs = wordObjects.map(word => (word.strongs || word.strong)).filter(word => word);
+  const strongs = wordObjects
+    .map((word) => word.strongs || word.strong)
+    .filter((word) => word);
   return strongs;
 }
 
@@ -83,7 +105,7 @@ export function getStrongsList(wordObjects) {
 export const getWordObjects = (verseObjects) => {
   let words = [];
 
-  if (! verseObjects || !verseObjects.length) {
+  if (!verseObjects || !verseObjects.length) {
     return null;
   }
 
@@ -105,4 +127,3 @@ export const getWordObjects = (verseObjects) => {
 
   return words;
 };
-

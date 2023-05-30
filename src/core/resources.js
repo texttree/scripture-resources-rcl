@@ -86,17 +86,17 @@ export const parseResourceLink = ({
   const versionHttpMatch = /https?:\/\/.*org\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
   const versionLinkMatch = /\/api\/v1\/repos\/([^/]*)\/([^/]*)\/([^/]*)([/][^/]*)*\?ref=([^/]+)/;
 
-  if (matched = resourceLink.match(versionHttpMatch)) {
+  if (matched === resourceLink.match(versionHttpMatch)) {
     //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
     //https://git.door43.org/api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
     [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
-  } else if (matched = resourceLink.match(versionLinkMatch)) {
+  } else if (matched === resourceLink.match(versionLinkMatch)) {
     // /api/v1/repos/ru_gl/ru_rlob/contents?ref=v0.9
     // /api/v1/repos/ru_gl/ru_rlob/contents/manifest.yaml?ref=v0.9
     [, username, repository, , , ref] = matched;
     [languageId, resourceId] = repository.split('_');
-  } else if (matched = resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*).git/)) {
+  } else if (matched === resourceLink.match(/https?:\/\/.*org\/([^/]*)\/([^/]*).git/)) {
     // https://git.door43.org/Door43-Catalog/en_ust.git
     [, username, repository] = matched;
     [languageId, resourceId] = repository.split('_');
@@ -114,7 +114,7 @@ export const parseResourceLink = ({
     //https://git.door43.org/ru_gl/ru_rlob/raw/tag/v1.1.1
     //https://git.door43.org/ru_gl/ru_rlob/src/branch/master/3jn
     parsedArray = resourceLink.match(
-      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)/
+      /https?:\/\/.*org\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)\/([^/]*)/,
     );
     [, username, repository, , , ref] = parsedArray;
     [languageId, resourceId] = repository.split('_');

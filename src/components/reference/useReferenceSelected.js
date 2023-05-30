@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import deepFreeze from 'deep-freeze';
 
-function useReferenceSelected({ 
+function useReferenceSelected({
   referenceSelected,
   onReferenceSelected,
 }) {
@@ -18,9 +18,7 @@ function useReferenceSelected({
   return {
     state: referenceSelected,
     actions:
-    {
-      update,
-    },
+    { update },
   };
 }
 
