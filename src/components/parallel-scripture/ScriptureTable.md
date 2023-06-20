@@ -1,9 +1,8 @@
 ### Using a Context
 
 ```js
-import {ScriptureTable, 
+import {ScriptureTable,
   ResourcesContext, ResourcesContextProvider,
-  SelectionsContext, SelectionsContextProvider,
 } from "scripture-resources-rcl";
 import useEffect from 'use-deep-compare-effect';
 
@@ -17,10 +16,10 @@ function Component ({reference}) {
   const [title, setTitle] = React.useState('');
   const [titles, setTitles] = React.useState([]);
   const [books, setBooks] = React.useState([]);
-  const [quote, setQuote] = React.useState('Θεὸς…λόγος');
+  const [quote, setQuote] = React.useState('Θεὸς & λόγος');
   const [occurrence, setOccurrence] = React.useState(1);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (resources.length > 0) {
       const {title: _title} = resources[0].project;
       setTitle(_title);
@@ -42,7 +41,7 @@ function Component ({reference}) {
         setBooks(_books);
       });
     }
-  }, [resources]);
+  }, [resources.length]);
 
   return (
     <>
@@ -55,7 +54,6 @@ function Component ({reference}) {
           title={title}
           reference={reference}
           quote={quote}
-          onQuote={setQuote}
           occurrence={occurrence}
           height='250px'
         />
@@ -76,13 +74,13 @@ const reference = {bookId: 'jhn', chapter: 1, verse: 1};
 
 //<Resources resourceLinks={resourceLinks} config={config} reference={reference} />
 const [ resources, setResources ] = React.useState( [] );
-const quote='Θεὸς…λόγος';
+const quote='Θεὸς & λόγος';
 const occurrence=1;
 <>
   <ResourcesContextProvider
     reference={reference}
     resources={resources}
-    resourceLinks={resourceLinks} 
+    resourceLinks={resourceLinks}
     onResources={setResources}
     config={config}
   >

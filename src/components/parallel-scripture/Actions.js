@@ -37,7 +37,7 @@ function ParallelTitles({
     <Grid
       container
       direction="row"
-      justify="flex-end"
+      justifyContent="flex-end"
       alignItems="center"
       className={classes.root}
     >

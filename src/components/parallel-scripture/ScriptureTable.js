@@ -39,24 +39,20 @@ function ScriptureTable({
   const classes = useStyles();
   const [filter, setFilter] = useState(!!reference);
   const [referenceIds, setReferenceIds] = useState([]);
+  const [verseObjects, setVerseObjects] = useState([]);
   const [_columns, setColumns] = useState([]);
   const columns = deepFreeze(_columns);
   const [selections, setSelections] = useState([]);
   const [columnsMenuAnchorEl, setColumnsMenuAnchorEl] = useState();
 
-  let verseObjects = [];
-
-  if (
-    reference &&
-    reference.verse &&
-    books[0] &&
-    books[0].chapters &&
-    books[0].chapters[reference.chapter]
-  ) {
-    const chapter = books[0].chapters[reference.chapter];
-    const verse = chapter[reference.verse];
-    verseObjects = verse ? verse.verseObjects : [];
+useEffect(() => {
+  if (reference?.verse && books?.[0]?.chapters?.[reference?.chapter]) {
+    const verse = books[0].chapters[reference.chapter][reference.verse];
+    if (verse) {
+      setVerseObjects(verse.verseObjects);
+    }
   }
+}, [reference, books]);
 
   useEffect(() => {
     const _columns = titles.map((title, index) => ({
@@ -67,8 +63,9 @@ function ScriptureTable({
   }, [titles]);
 
   useEffect(() => {
-    const _referenceIds = referenceIdsFromBooks({ books });
-    setReferenceIds(_referenceIds);
+    if (books.length > 0) {
+      setReferenceIds(referenceIdsFromBooks({ books }));
+    }
   }, [books]);
 
   const actions = [
@@ -118,9 +115,11 @@ function ScriptureTable({
   const rows = useMemo(
     () => () =>
       _referenceIds.map((referenceId) => {
+        if (books.length === 0) {
+          return;
+        }
         const verses = versesFromReferenceIdAndBooks({ referenceId, books });
-
-        const row = (
+        return (
           <Row
             renderOffscreen={open && renderOffscreen[referenceId]}
             key={referenceId}
@@ -131,7 +130,6 @@ function ScriptureTable({
             columns={columns}
           />
         );
-        return row;
       }),
     [_referenceIds, books, open, renderOffscreen, reference, filter, columns],
   );
@@ -152,7 +150,6 @@ function ScriptureTable({
   return (
     <SelectionsContextProvider
       quote={quote}
-      // onQuote={onQuote} // disable until round trip is working
       occurrence={occurrence}
       verseObjects={verseObjects}
       selections={selections}
@@ -177,10 +174,10 @@ ScriptureTable.propTypes = {
   ).isRequired,
   books: PropTypes.arrayOf(
     PropTypes.shape({
-      headers: PropTypes.array.isRequired,
-      chapters: PropTypes.object.isRequired,
+      headers: PropTypes.array,
+      chapters: PropTypes.object,
     }),
-  ).isRequired,
+  ),
   /** the reference to scroll into view */
   reference: PropTypes.shape({
     bookId: PropTypes.string,

@@ -60,6 +60,10 @@ function Row({
                   disableWordPopover
                   getLexiconData={getLexiconData}
                   translate={translate}
+                  reference={{
+                    chapter: referenceId.split(':')[0],
+                    verse: referenceId.split(':')[1],
+                  }}
                 />
               ) : (
                 <span>&nbsp;</span>

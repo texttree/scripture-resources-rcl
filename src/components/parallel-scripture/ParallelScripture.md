@@ -3,11 +3,11 @@
 To see highlighting appear, change the `-1` occurrence to 1;
 then click or tab out of field.
 
-To add resources to the RCL, please see the following sample paths:  
-`Door43-Catalog/hi/ulb/master/3jn`  
-`STR/hi/irv/master/3jn`  
-To add resources to the app, please omit bookId from the end:  
-`Door43-Catalog/hi/ulb/master`  
+To add resources to the RCL, please see the following sample paths:
+`Door43-Catalog/hi/ulb/master/3jn`
+`STR/hi/irv/master/3jn`
+To add resources to the app, please omit bookId from the end:
+`Door43-Catalog/hi/ulb/master`
 `STR/hi/irv/master`
 
 ```js
@@ -23,7 +23,7 @@ function Component() {
   const [bookId, setBookId] = React.useState('3jn');
   const [chapter, setChapter] = React.useState(1);
   const [verse, setVerse] = React.useState(10);
-  const [quote, setQuote] = React.useState('καὶ…μὴ');
+  const [quote, setQuote] = React.useState('καὶ & μὴ');
   const [occurrence, setOccurrence] = React.useState(-1);
 
   const form = React.useMemo(
@@ -73,13 +73,12 @@ function Component() {
     [bookId, chapter, verse, quote, occurrence]
   );
 
-  const component = React.useMemo(() => {
+const component = React.useMemo(() => {
     const reference = { bookId, chapter, verse };
     return (
       <ParallelScripture
         reference={reference}
         quote={quote}
-        onQuote={setQuote}
         occurrence={occurrence}
         height="250px"
       />
@@ -99,8 +98,8 @@ const config = { server: 'https://git.door43.org' };
 
 const defaultResourceLinks = [
   'unfoldingWord/el-x-koine/ugnt/master/3jn',
-  'unfoldingWord/en/ult/v5/3jn',
-  'unfoldingWord/en/ust/v5/3jn',
+  'unfoldingWord/en/ult/master/3jn',
+  'unfoldingWord/en/ust/master/3jn',
   'ru_gl/ru/rlob/master/3jn',
   'https://git.door43.org/unfoldingWord/en_ust/src/branch/master',
 ];

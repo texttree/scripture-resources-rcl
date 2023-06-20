@@ -27,6 +27,7 @@ function FootnoteObject({ verseObject }) {
       <Badge
         className={classes.badge}
         badgeContent="fn"
+        overlap="rectangular"
         color="primary"
         aria-describedby={id}
         variant="standard"

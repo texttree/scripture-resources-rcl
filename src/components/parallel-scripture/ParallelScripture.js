@@ -107,7 +107,6 @@ function ParallelScripture({
         reference={reference}
         height={height}
         quote={quote}
-        // onQuote={onQuote} // disable until round trip is working
         occurrence={occurrence}
         buttons={buttons}
         open={open}

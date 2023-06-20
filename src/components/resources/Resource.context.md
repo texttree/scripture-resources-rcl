@@ -4,12 +4,9 @@ A custom hook to retrieve resources from DCS. Unlike useResource it allows to re
 
 ```jsx
 import React, { useEffect, useState } from "react";
-import { BlockEditable } from "markdown-translatable";
-import useRsrc from "./useRsrc";
+import { Book, useRsrc } from 'scripture-resources-rcl';
 const reference = {
   projectId: "tit",
-  chapter: 1,
-  verse: 1,
 };
 const resourceLink = "unfoldingWord/en/ult/master";
 const config = {
@@ -30,7 +27,7 @@ function Component() {
       getBibleJson: true,
     },
   });
-  return <BlockEditable markdown={content || ""} />;
+  return <>{content !== null ? <Book book={content} paragraphs showUnsupported reference={reference} /> : 'loading'}</>;
 }
 
 <Component />;

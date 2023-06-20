@@ -1,5 +1,5 @@
 import isEqual from 'deep-equal';
-import _ from 'lodash';
+import { sortBy, uniq } from 'lodash';
 import { tokenize } from 'string-punctuation-tokenizer';
 import { verseObjectsToString } from './verseObjects';
 
@@ -323,9 +323,9 @@ export const optimizeRanges = (ranges) => {
   if (ranges.length === 1) {
     return ranges;
   } // if there's only one, return it
-  ranges = _.sortBy(ranges, (range) => range[1]); // order ranges by end char index as secondary
-  ranges = _.sortBy(ranges, (range) => range[0]); // order ranges by start char index as primary
-  ranges = _.uniq(ranges); // remove duplicates
+  ranges = sortBy(ranges, (range) => range[1]); // order ranges by end char index as secondary
+  ranges = sortBy(ranges, (range) => range[0]); // order ranges by start char index as primary
+  ranges = uniq(ranges); // remove duplicates
   // combine overlapping and contiguous ranges
   let runningRange = []; // the running range to merge overlapping and contiguous ranges
 

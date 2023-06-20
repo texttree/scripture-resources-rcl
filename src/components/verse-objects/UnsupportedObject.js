@@ -30,6 +30,7 @@ function UnsupportedObject({ verseObject }) {
         className={classes.badge}
         badgeContent={verseObject.tag}
         variant="standard"
+        overlap="rectangular"
         color="error"
         aria-describedby={id}
         onClick={handleClick}

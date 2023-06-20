@@ -91,7 +91,7 @@ export const areSelected = ({
       const text = selections[i].text; //already normalized.
       const occ = selections[i].occurrence;
       const occs = selections[i].occurrences;
-      const { chapter: ch = 100, verse: v = 100 } = selections[i].reference;
+      const { chapter: ch = 100, verse: v = 100 } = selections[i]?.reference ?? {chapter: 100, verse: 100};
 
       if (
         text === _text &&

@@ -15,7 +15,7 @@ function Toolbar({
     <Grid
       container
       direction="row"
-      justify="space-between"
+      justifyContent="space-between"
       alignItems="center"
       className={classes.root}
     >

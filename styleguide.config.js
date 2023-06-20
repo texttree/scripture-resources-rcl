@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require("webpack")
 const upperFirst = require('lodash/upperFirst');
 const camelCase = require('lodash/camelCase');
 const { name, version, repository } = require('./package.json');
@@ -203,16 +204,18 @@ module.exports = {
   serverPort: 6060,
   webpackConfig: {
     devtool: 'source-map',
+    plugins: [
+      new webpack.DefinePlugin({
+          process: {env: {}},
+      }),
+    ],
+    resolve: {fallback: { "path": require.resolve("path-browserify") }},
     module: {
       rules: [
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: 'babel-loader',
-        },
-        {
-          test: /\.css$/,
-          loader: 'style-loader!css-loader',
+          loader: 'babel-loader'
         },
       ],
     },

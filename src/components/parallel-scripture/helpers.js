@@ -5,14 +5,25 @@ export const referenceIdsFromBooks = ({ books }) => {
 
   books.forEach((book) => {
     if (book) {
-      Object.keys(book.chapters).forEach((chapterKey) => {
-        const chapter = book.chapters[chapterKey];
+      if (book.json) {
+        Object.keys(book.json.chapters).forEach((chapterKey) => {
+          const chapter = book.json.chapters[chapterKey];
 
-        Object.keys(chapter).forEach((verseKey) => {
-          const referenceId = chapterKey + ':' + verseKey;
-          referenceIds.add(referenceId);
+          Object.keys(chapter).forEach((verseKey) => {
+            const referenceId = chapterKey + ':' + verseKey;
+            referenceIds.add(referenceId);
+          });
         });
-      });
+      } else {
+        Object.keys(book.chapters).forEach((chapterKey) => {
+          const chapter = book.chapters[chapterKey];
+
+          Object.keys(chapter).forEach((verseKey) => {
+            const referenceId = chapterKey + ':' + verseKey;
+            referenceIds.add(referenceId);
+          });
+        });
+      }
     }
   });
   return [...referenceIds];
@@ -47,7 +58,9 @@ export const versesFromReferenceIdAndBooks = ({ referenceId, books }) => {
     }
     //if (book && book.chapters && book.chapters.length > reference.chapter) {
 
-    const chapterData = book.json.chapters[reference.chapter];
+    const chapterData = book.json
+      ? book.json.chapters[reference.chapter]
+      : book.chapters[reference.chapter];
     let verseData = chapterData && chapterData[reference.verse];
     let range;
 
