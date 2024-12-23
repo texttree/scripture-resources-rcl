@@ -1,7 +1,7 @@
 {
   "name": "@texttree/scripture-resources-rcl",
   "description": "A React Component Library for Rendering Scripture Resources.",
-  "version": "5.5.0",
+  "version": "5.5.1",
   "homepage": "https://tt-scripture-resources-rcl.netlify.com/",
   "repository": {
     "type": "git",
@@ -77,8 +77,8 @@
     "file-loader": "^4.2.0",
     "istanbul-lib-coverage": "^2.0.5",
     "jest": "^25.1.0",
-    "react": "^17",
-    "react-dom": "^17",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-json-view": "^1.19.1",
     "react-scripts": "^2.1.8",
     "react-styleguidist": "^9.1.14",
@@ -93,8 +93,8 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
     "@material-ui/styles": "^4.4.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "tc-ui-toolkit": "^5.3.3",
     "word-aligner": "^1.0.0"
   },
